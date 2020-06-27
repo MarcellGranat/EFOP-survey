@@ -4,112 +4,142 @@ author: "Granát Marcell"
 output: github_document
 editor_options: 
   chunk_output_type: inline
-  
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE, message = F, warning = F, comment = "", fig.align = "center", fig.width = 9, fig.height = 6)
 library(tidyverse)
+library(pedometrics)
 theme_set(theme_minimal() + theme(
   legend.title = element_blank()
 ))
 load("C:/Users/user/Desktop/OkoR/EFOP-survey/EFOP_uni_student_survey.RData")
 ```
 
+```{r}
+skimr::skim(survey)
+```
+
+
 ```{r fig.height=3}
-ggplot(survey, aes(v1)) + 
-  geom_bar(color = "black", width = .6) + 
-  coord_flip() + labs(x = "", y = "", title = df_names[1, 2])
+ggplot(survey, aes(v1)) +
+  geom_bar(color = "black", width = .6) +
+  coord_flip() +
+  labs(x = "", y = "", title = df_names[1, 2])
 ```
 
 ```{r}
-ggplot(survey, aes(v2)) + 
-  geom_bar(color = "black", width = .8) + 
-  coord_flip() + labs(x = "", y = "",title = df_names[2, 2])
+ggplot(survey, aes(v2)) +
+  geom_bar(color = "black", width = .8) +
+  coord_flip() +
+  labs(x = "", y = "", title = df_names[2, 2])
 ```
 
 ```{r}
-ggplot(survey, aes(v3)) + 
-  geom_bar(color = "black", width = .8) + 
-  coord_flip() + labs(x = "", y = "", title = df_names[3, 2])
+ggplot(survey, aes(v3)) +
+  geom_bar(color = "black", width = .8) +
+  coord_flip() +
+  labs(x = "", y = "", title = df_names[3, 2])
 ```
 
 ```{r}
-ggplot(survey, aes(v4)) + 
-  geom_bar(color = "black", width = .8) + 
-  coord_flip() + labs(x = "", y = "", title = df_names[4, 2])
+ggplot(survey, aes(v4)) +
+  geom_bar(color = "black", width = .8) +
+  coord_flip() +
+  labs(x = "", y = "", title = df_names[4, 2])
 ```
 
 ```{r}
-ggplot(survey, aes(v5)) + 
-  geom_bar(color = "black", width = .8) + 
-  coord_flip() + labs(x = "", y = "", title = "Milyen képzésre jár?")
+ggplot(survey, aes(v5)) +
+  geom_bar(color = "black", width = .8) +
+  coord_flip() +
+  labs(x = "", y = "", title = "Milyen képzésre jár?")
 ```
 
 ```{r}
-ggplot(survey, aes(v6)) + 
-  geom_bar(color = "black", width = .8) + 
-  coord_flip() + labs(x = "", y = "", title = "Milyen képzési területre jár?")
+ggplot(survey, aes(v6)) +
+  geom_bar(color = "black", width = .8) +
+  coord_flip() +
+  labs(x = "", y = "", title = "Milyen képzési területre jár?")
 ```
 
 ```{r fig.height=3.5}
-ggplot(survey, aes(v7)) + 
-  geom_bar(color = "black", width = .8) + 
-  coord_flip() + labs(x = "", y = "", title = df_names[7, 2])
+ggplot(survey, aes(v7)) +
+  geom_bar(color = "black", width = .8) +
+  coord_flip() +
+  labs(x = "", y = "", title = df_names[7, 2])
 ```
 
 ```{r fig.height=4}
-ggplot(survey, aes(v8)) + 
-  geom_bar(color = "black", width = .8) + 
-  coord_flip() + labs(x = "", y = "", title = df_names[8, 2])
+ggplot(survey, aes(v8)) +
+  geom_bar(color = "black", width = .8) +
+  coord_flip() +
+  labs(x = "", y = "", title = df_names[8, 2])
 ```
 
 ```{r fig.height=4}
-ggplot(survey, aes(v9)) + 
-  geom_bar(color = "black", width = .8) + 
-  coord_flip() + labs(x = "", y = "", title = df_names[9, 2])
+ggplot(survey, aes(v9)) +
+  geom_bar(color = "black", width = .8) +
+  coord_flip() +
+  labs(x = "", y = "", title = df_names[9, 2])
 ```
 
 ```{r fig.height=3}
-ggplot(survey, aes(v10)) + 
-  geom_bar(color = "black", width = .8) + 
-  coord_flip() + labs(x = "", y = "", title = df_names[10, 2])
+ggplot(survey, aes(v10)) +
+  geom_bar(color = "black", width = .8) +
+  coord_flip() +
+  labs(x = "", y = "", title = df_names[10, 2])
 ```
 
 ```{r fig.height=4}
-ggplot(survey, aes(v11)) + 
-  geom_bar(color = "black", width = .8) + 
-  coord_flip() + labs(x = "", y = "", title = df_names[11, 2])
+ggplot(survey, aes(v11)) +
+  geom_bar(color = "black", width = .8) +
+  coord_flip() +
+  labs(x = "", y = "", title = df_names[11, 2])
 ```
 
 ```{r fig.height=4}
-ggplot(survey, aes(v12)) + 
-  geom_bar(color = "black", width = .8) + 
-  coord_flip() + labs(x = "", y = "", title = df_names[12, 2])
+ggplot(survey, aes(v12)) +
+  geom_bar(color = "black", width = .8) +
+  coord_flip() +
+  labs(x = "", y = "", title = df_names[12, 2])
 ```
 
 ```{r}
-survey %>% select(v13:v17) %>% gather() %>% filter(!is.na(value)) %>% count(value) %>%
+survey %>%
+  select(v13:v17) %>%
+  gather() %>%
+  filter(!is.na(value)) %>%
+  count(value) %>%
   mutate(
-    n = n/sum(n),
-    value = fct_reorder(value, n)                                                               
-  ) %>% arrange(desc(n)) %>% mutate(c_n = cumsum(n)-n/2) %>% 
-  ggplot(aes(x="", y=n, fill=value)) + 
+    n = n / sum(n),
+    value = fct_reorder(value, n)
+  ) %>%
+  arrange(desc(n)) %>%
+  mutate(c_n = cumsum(n) - n / 2) %>%
+  ggplot(aes(x = "", y = n, fill = value)) +
   geom_bar(stat = "identity") +
-  coord_polar("y", start = 0) + 
+  coord_polar("y", start = 0) +
   ggrepel::geom_label_repel(aes(x = "", y = c_n, label = scales::percent(n, accuracy = .01)), fill = "white", size = 5, show.legend = F, nudge_x = 1) +
   scale_fill_grey() +
-  theme_void() + theme(
+  theme_void() +
+  theme(
     legend.title = element_blank()
   )
 ```
 
 ```{r}
-df <- survey %>% select(v18:v36) %>% gather() %>% 
-  group_by(key,value) %>% summarize(n=n()/nrow(survey)) %>% mutate(value = factor(value),
-                                                                   n = ifelse(value == 3, n/2, n))
+df <- survey %>%
+  select(v18:v36) %>%
+  gather() %>%
+  group_by(key, value) %>%
+  summarize(n = n() / nrow(survey)) %>%
+  mutate(
+    value = factor(value),
+    n = ifelse(value == 3, n / 2, n)
+  )
 
-v <- sapply(str_split(df_names[18:36,2], "> "),"[",2)
+v <- sapply(str_split(df_names[18:36, 2], "> "), "[", 2)
 v[12] <- "Azonosuljon a cég céljaival és értékrendjével"
 v[14] <- "Kezdeményezések a testi és lelki jólététért"
 v[15] <- "Munkaterhelés a munkaidő alatt kezelhető legyen"
@@ -121,10 +151,10 @@ v[19] <- "Virtuális platform, amely elősegíti az együttműködést"
 
 
 ggplot() +
-  geom_hline(yintercept = 0, color="black", size = 1.1) +
-  geom_bar(data = filter(df, as.numeric(value)<4), aes(x = key, y = -n, fill = factor(value)) , position = "stack", stat = "identity", color = "black") +
-  geom_bar(data = filter(df, as.numeric(value)>2), aes(x = key, y = n, fill = factor(value)) , position = position_stack(reverse = TRUE), stat = "identity", color = "black") +
-  scale_fill_grey() + 
+  geom_hline(yintercept = 0, color = "black", size = 1.1) +
+  geom_bar(data = filter(df, as.numeric(value) < 4), aes(x = key, y = -n, fill = factor(value)), position = "stack", stat = "identity", color = "black") +
+  geom_bar(data = filter(df, as.numeric(value) > 2), aes(x = key, y = n, fill = factor(value)), position = position_stack(reverse = TRUE), stat = "identity", color = "black") +
+  scale_fill_grey() +
   coord_flip() +
   xlab("") +
   ylab("") +
@@ -136,24 +166,89 @@ ggplot() +
   scale_x_discrete(labels = v)
 ```
 
-```{r fig.height=6.5}
-survey %>% ggplot(aes(x = v59, y = v60)) +
-  geom_hline(aes(yintercept = mean(survey$v60, na.rm = T),color = "Átlag"), linetype = "dashed") +
-  geom_vline(xintercept = mean(survey$v59, na.rm = T),color = "black", linetype = "dashed") +
-  geom_point(alpha = .5) + 
-  geom_smooth(method = "lm", color = "red") + 
-  scale_x_continuous(breaks = seq(from = 100000, to = 600000, by = 100000), labels = seq(from = 100, to = 600, by = 100)) + 
-  scale_y_continuous(breaks = seq(from = 100000, to = 600000, by = 100000), labels = seq(from = 100, to = 600, by = 100)) +
-  labs(x = "amennyivel elégedett lenne?", y = "amely azÖn szakterületén pályakezdőként elérhető?", title = "Mekkora az a havi jövedelem, ...", 
-       caption = "Az értékek forintban értendőek, '000",
-       subtitle = str_c("r = ", survey %>% select(v59, v60) %>% na.exclude() %>% cor() %>% min() %>% round(digits = 2))
-       ) +
-  scale_color_manual(values = c("Átlag" = "black")) + theme(
-    legend.position = "bottom"
-  )
+
+```{r}
+survey_W_outliers %>% select(v59, v60) %>% gather() %>% ggplot() +
+  geom_boxplot(aes(x=key, y=value)) +
+  scale_y_log10() + coord_flip() +
+  scale_x_discrete(labels = c("amennyivel elégedett lenne?","amely az Ön szakterületén\npályakezdőként elérhető?")) +
+  labs(x="", y="", title = "Mekkora az a havi jövedelem, ...", subtitle = "Dobozábra",
+    caption = "Logaritmikus skála, az eltávolítandó kiugró értékeket pont jelöli.")
 ```
 
 
 
 
+
+```{r}
+survey %>% select(v59,v60) %>% gather() %>% filter(!is.na(value)) %>% ggplot() +
+  geom_histogram(aes(value), color = "black", fill = "grey80") + 
+  facet_wrap(~key, nrow = 2, labeller =  labeller(key=c(v59="amennyivel elégedett lenne?", v60="amely az Ön szakterületén pályakezdőként elérhető?"))) + 
+  labs(x="", y="", title = "Mekkora az a havi jövedelem, ...", subtitle = "Hisztogram",
+    caption = "A vízszintes tengelyen az értékek forintban értendőek, '000") +
+  geom_vline(data = data.frame(key = c("v59", "v60"), value = c(mean(survey$v59, na.rm = T), mean(survey$v60, na.rm = T))),
+             aes(xintercept = value, color = "Átlag"), linetype = "dashed", size = 1.1) +
+  scale_x_continuous(breaks = seq(from=100000, to=600000, by = 100000), labels = seq(from=100, to=600, by = 100)) +
+  scale_color_manual(values = c("Átlag" = "red")) + theme(
+    legend.position = "bottom"
+  )
+```
+
+
+```{r fig.height=6.5}
+survey %>% ggplot(aes(x = v59, y = v60)) +
+  geom_hline(aes(yintercept = mean(survey$v60, na.rm = T), color = "Átlag"), linetype = "dashed") +
+  geom_vline(xintercept = mean(survey$v59, na.rm = T), color = "black", linetype = "dashed") +
+  geom_point(alpha = .5) +
+  geom_smooth(method = "lm", color = "red") +
+  scale_x_continuous(breaks = seq(from = 100000, to = 600000, by = 100000), labels = seq(from = 100, to = 600, by = 100)) +
+  scale_y_continuous(breaks = seq(from = 100000, to = 600000, by = 100000), labels = seq(from = 100, to = 600, by = 100)) +
+  labs(
+    x = "amennyivel elégedett lenne?", y = "amely az Ön szakterületén pályakezdőként elérhető?", title = "Mekkora az a havi jövedelem, ...",
+    caption = "Az értékek forintban értendőek, '000",
+    subtitle = str_c("r = ", survey %>% select(v59, v60) %>% na.exclude() %>% cor() %>% min() %>% round(digits = 2))
+  ) +
+  scale_color_manual(values = c("Átlag" = "black")) +
+  theme(
+    legend.position = "bottom"
+  )
+```
+
+
+```{r fig.height=8.5}
+v <- df_names[-c(59,60),2]
+cramer_matrix <- survey %>% select(-c(v59, v60)) %>% 
+  mutate_all(funs(
+    fct_explicit_na(., na_level = "nem válaszolt")
+                  )
+             ) %>% 
+          data.frame() %>% cramer() %>% data.frame() %>% mutate(
+               x = names(.)
+             ) %>% gather(key = "y", value = "value", -x) %>% mutate(
+                  x = as.numeric(str_remove(x, "v")),
+                  y = as.numeric(str_remove(y, "v")),
+                  y = ifelse(x > y, y, NA),
+             )
+
+cramer_matrix %>% ggplot() +
+            geom_tile(aes(x = x, y = y, fill = value), color = "black", linejoin =  "mitre", size = .01 ) +
+  scale_fill_gradient(low = "white", high = "#FF5B6B") +
+  scale_x_discrete(expand = c(0, 0), limits = seq(from = 10, by = 10, to = 100)) +
+  scale_y_discrete(expand = c(0, 0), limits = seq(from = 10, by = 10, to = 100)) +
+  labs(
+  x =  "1. változó sorszáma a kapcsolatvizsgálat során",
+  y = "2. változó sorszáma a kapcsolatvizsgálat során",
+  title = "Cramer-mutatók mátrixa"
+)
+            
+```
+
+```{r}
+cramer_matrix %>% mutate(
+  x = v[x],
+  y = v[y],
+  value = round(value, digits = 2)
+) %>% filter(!is.na(y)) %>% 
+  arrange(desc(value)) %>% head(20) %>% knitr::kable(caption = "Legnagyobb Cramer-mutatóval rendelkező párosítások")
+```
 
