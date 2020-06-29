@@ -3,247 +3,135 @@ Egyetemisták elképzelései a jövő munkahelyéről
 Granát Marcell
 
 ``` r
-df_names %>% knitr::kable(caption = "Változókhoz tartozó kérdések")
+survey %>% rename_all(funs(c(str_c(df_names$new_names, ": ", df_names$original_names)))) %>% skimr::skim()
 ```
 
-| new\_names | original\_names                                                                                                                                                                                                                                                                                                       |
-| :--------- | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| v1         | Nem                                                                                                                                                                                                                                                                                                                   |
-| v2         | Hol van az állandó lakcíme?                                                                                                                                                                                                                                                                                           |
-| v3         | A szülei végzettségei közül melyik a legmagasabb?                                                                                                                                                                                                                                                                     |
-| v4         | Melyik felsőoktatási intézményben tanul?                                                                                                                                                                                                                                                                              |
-| v5         | Milyen képzésre jár ezen az egyetemen? (Ha többfélére is, akkor a legfontosabbnak tartottat jelölje meg\!)                                                                                                                                                                                                            |
-| v6         | Milyen képzésterületre jár? (Ha többre is, akkor a legfontosabbnak tartottat adja meg\!)                                                                                                                                                                                                                              |
-| v7         | Tervezi-e, hogy jelenlegi képzése(i) után folytatja a tanulmányait?                                                                                                                                                                                                                                                   |
-| v8         | Milyen szintű az angol nyelvtudása?                                                                                                                                                                                                                                                                                   |
-| v9         | Milyen szintű a német nyelvtudása?                                                                                                                                                                                                                                                                                    |
-| v10        | Volt-e már munkaviszonya?                                                                                                                                                                                                                                                                                             |
-| v11        | A munkaviszonya az Ön által legfontosabbnak tartott szakterületéhez kapcsolódott-e?                                                                                                                                                                                                                                   |
-| v12        | Milyen hosszan tartott? (Ha több is volt, összesítve adja meg\!)                                                                                                                                                                                                                                                      |
-| v13        | Milyen típusú cégnél dolgozott? \> KKV                                                                                                                                                                                                                                                                                |
-| v14        | Milyen típusú cégnél dolgozott? \> magyar nagyvállalat                                                                                                                                                                                                                                                                |
-| v15        | Milyen típusú cégnél dolgozott? \> multinacionális vállalat                                                                                                                                                                                                                                                           |
-| v16        | Milyen típusú cégnél dolgozott? \> közszféra                                                                                                                                                                                                                                                                          |
-| v17        | Milyen típusú cégnél dolgozott? \> egyéb                                                                                                                                                                                                                                                                              |
-| v18        | Mennyire tartja fontosnak az alábbi szempontokat egy munkahely kapcsán? (1: egyáltalán nem fontos - 5: nagyon fontos) \> Magas bér és juttatások                                                                                                                                                                      |
-| v19        | Mennyire tartja fontosnak az alábbi szempontokat egy munkahely kapcsán? (1: egyáltalán nem fontos - 5: nagyon fontos) \> Előmenetel lehetősége                                                                                                                                                                        |
-| v20        | Mennyire tartja fontosnak az alábbi szempontokat egy munkahely kapcsán? (1: egyáltalán nem fontos - 5: nagyon fontos) \> Szakmai fejlődés                                                                                                                                                                             |
-| v21        | Mennyire tartja fontosnak az alábbi szempontokat egy munkahely kapcsán? (1: egyáltalán nem fontos - 5: nagyon fontos) \> Változatos munkavégzés, szakmai kihívások                                                                                                                                                    |
-| v22        | Mennyire tartja fontosnak az alábbi szempontokat egy munkahely kapcsán? (1: egyáltalán nem fontos - 5: nagyon fontos) \> Munkahelyi környezet (iroda, felszereltség)                                                                                                                                                  |
-| v23        | Mennyire tartja fontosnak az alábbi szempontokat egy munkahely kapcsán? (1: egyáltalán nem fontos - 5: nagyon fontos) \> Vállalat hírneve, presztízse, tevékenysége                                                                                                                                                   |
-| v24        | Mennyire tartja fontosnak az alábbi szempontokat egy munkahely kapcsán? (1: egyáltalán nem fontos - 5: nagyon fontos) \> Vállalati struktúra (KKV, multinacionális vállalat)                                                                                                                                          |
-| v25        | Mennyire tartja fontosnak az alábbi szempontokat egy munkahely kapcsán? (1: egyáltalán nem fontos - 5: nagyon fontos) \> Lakhatási támogatás                                                                                                                                                                          |
-| v26        | Mennyire tartja fontosnak az alábbi szempontokat egy munkahely kapcsán? (1: egyáltalán nem fontos - 5: nagyon fontos) \> Külföldi tapasztalatszerzés lehetősége                                                                                                                                                       |
-| v27        | Mennyire tartja fontosnak az alábbi szempontokat egy munkahely kapcsán? (1: egyáltalán nem fontos - 5: nagyon fontos) \> A csapatmunka                                                                                                                                                                                |
-| v28        | Mennyire tartja fontosnak az alábbi szempontokat egy munkahely kapcsán? (1: egyáltalán nem fontos - 5: nagyon fontos) \> Hogy kollégái között barátokat is találjon                                                                                                                                                   |
-| v29        | Mennyire tartja fontosnak az alábbi szempontokat egy munkahely kapcsán? (1: egyáltalán nem fontos - 5: nagyon fontos) \> Hogy Ön és kollégái azonosuljanak a cég céljaival és értékrendjével                                                                                                                          |
-| v30        | Mennyire tartja fontosnak az alábbi szempontokat egy munkahely kapcsán? (1: egyáltalán nem fontos - 5: nagyon fontos) \> Hogy kollégáival együtt fejlődjön                                                                                                                                                            |
-| v31        | Mennyire tartja fontosnak az alábbi szempontokat egy munkahely kapcsán? (1: egyáltalán nem fontos - 5: nagyon fontos) \> Hogy legyenek olyan kezdeményezések, amelyek sikeresen biztosítják a munkavállalók testi és lelki jólétét                                                                                    |
-| v32        | Mennyire tartja fontosnak az alábbi szempontokat egy munkahely kapcsán? (1: egyáltalán nem fontos - 5: nagyon fontos) \> Hogy a munkaterhelés a munkaidő alatt kezelhető legyen, így a munkavállalók teljes mértékben kihasználhassák a pihenőidőt, és munkahelyi nyomás nélkül lazíthassanak esténként és hétvégeken |
-| v33        | Mennyire tartja fontosnak az alábbi szempontokat egy munkahely kapcsán? (1: egyáltalán nem fontos - 5: nagyon fontos) \> Olyan munkakörnyezet megléte, amely elősegíti a jólétet (például a pihenésre, a felüdülésre alkalmas terek), és alkalmazkodik a különféle munkastílusokhoz                                   |
-| v34        | Mennyire tartja fontosnak az alábbi szempontokat egy munkahely kapcsán? (1: egyáltalán nem fontos - 5: nagyon fontos) \> Hogy a munkahely aktívan támogassa a táv- és a virtuális munkát mindazoknak, akiknek a munkalehetősége lehetővé teszi                                                                        |
-| v35        | Mennyire tartja fontosnak az alábbi szempontokat egy munkahely kapcsán? (1: egyáltalán nem fontos - 5: nagyon fontos) \> Hogy a munkavállaló szabadon dönthessen arról, hogy hogyan strukturálja a munkáját                                                                                                           |
-| v36        | Mennyire tartja fontosnak az alábbi szempontokat egy munkahely kapcsán? (1: egyáltalán nem fontos - 5: nagyon fontos) \> Hogy legyen egy virtuális platform, amely elősegíti a kollégákkal való együttműködést                                                                                                        |
-| v37        | Melyik tényezők miatt mondana fel egy munkahelyen? (1: emiatt nem mondanék fel - 5: emiatt mindenképpen felmondanék) \> A munkámat nem ismerik el                                                                                                                                                                     |
-| v38        | Melyik tényezők miatt mondana fel egy munkahelyen? (1: emiatt nem mondanék fel - 5: emiatt mindenképpen felmondanék) \> A béremelés kicsiny mértéke, elmaradása                                                                                                                                                       |
-| v39        | Melyik tényezők miatt mondana fel egy munkahelyen? (1: emiatt nem mondanék fel - 5: emiatt mindenképpen felmondanék) \> Ha az előrejutás nem szakmai szempontok alapján történik                                                                                                                                      |
-| v40        | Melyik tényezők miatt mondana fel egy munkahelyen? (1: emiatt nem mondanék fel - 5: emiatt mindenképpen felmondanék) \> Sok túlóra, nagy leterheltség                                                                                                                                                                 |
-| v41        | Melyik tényezők miatt mondana fel egy munkahelyen? (1: emiatt nem mondanék fel - 5: emiatt mindenképpen felmondanék) \> Túlórák ki nem fizetése                                                                                                                                                                       |
-| v42        | Melyik tényezők miatt mondana fel egy munkahelyen? (1: emiatt nem mondanék fel - 5: emiatt mindenképpen felmondanék) \> Szakmailag nem megfelelő környezet                                                                                                                                                            |
-| v43        | Melyik tényezők miatt mondana fel egy munkahelyen? (1: emiatt nem mondanék fel - 5: emiatt mindenképpen felmondanék) \> Monoton munka, kevés kihívás                                                                                                                                                                  |
-| v44        | Melyik tényezők miatt mondana fel egy munkahelyen? (1: emiatt nem mondanék fel - 5: emiatt mindenképpen felmondanék) \> Legalább 20%-kal magasabb bérajánlat máshonnan                                                                                                                                                |
-| v45        | Melyiket tartja fontosabbnak? (Hozzáadott érték vagy munkaidő kitöltése)                                                                                                                                                                                                                                              |
-| v46        | Melyiket tartja fontosabbnak? (Multiple career path vagy Up or out)                                                                                                                                                                                                                                                   |
-| v47        | Állítsa fontosság szerint sorrendbe az alábbiakat\! Előre kerüljön az Ön szerint legfontosabb\! \> Munka és magánélet egyensúlya                                                                                                                                                                                      |
-| v48        | Állítsa fontosság szerint sorrendbe az alábbiakat\! Előre kerüljön az Ön szerint legfontosabb\! \> Fizetés                                                                                                                                                                                                            |
-| v49        | Állítsa fontosság szerint sorrendbe az alábbiakat\! Előre kerüljön az Ön szerint legfontosabb\! \> Szakmai előrehaladás                                                                                                                                                                                               |
-| v50        | Állítsa fontosság szerint sorrendbe az alábbiakat\! Előre kerüljön az Ön szerint legfontosabb\! \> Szociális kapcsolatok                                                                                                                                                                                              |
-| v51        | Mit tartana ideálisnak, hányan dolgozzanak egy helyiségben?                                                                                                                                                                                                                                                           |
-| v52        | Mit tart ideálisnak a meetingek gyakoriságára vonatkozóan?                                                                                                                                                                                                                                                            |
-| v53        | Igényelné-e az állandó online kapcsolattartást a kollégákkal?                                                                                                                                                                                                                                                         |
-| v54        | Az alábbi atipikus foglalkozási formák közül melyik érdekelné? \> platform alapú                                                                                                                                                                                                                                      |
-| v55        | Az alábbi atipikus foglalkozási formák közül melyik érdekelné? \> távmunka                                                                                                                                                                                                                                            |
-| v56        | Az alábbi atipikus foglalkozási formák közül melyik érdekelné? \> részmunka                                                                                                                                                                                                                                           |
-| v57        | Az alábbi atipikus foglalkozási formák közül melyik érdekelné? \> saját vállalkozás indítása (startup)                                                                                                                                                                                                                |
-| v58        | Az alábbi atipikus foglalkozási formák közül melyik érdekelné? \> nem helyhez kötött munkavégzés                                                                                                                                                                                                                      |
-| v59        | Mekkora az a havi nettó bér, amivel elégedett lenne?                                                                                                                                                                                                                                                                  |
-| v60        | Ön szerint mekkora az a havi nettó bér, amely az Ön szakterületén pályakezdőként reálisan elérhető?                                                                                                                                                                                                                   |
-| v61        | 5 év elteltével a kezdőfizetése hányszorosával lenne elégedett?                                                                                                                                                                                                                                                       |
-| v62        | 5 év elteltével milyen beosztást szeretne elérni?                                                                                                                                                                                                                                                                     |
-| v63        | Mennyire fontos önnek, hogy 5 év alatt jelentős szakmai fejlődést produkáljon (anyagiakon és előremenetelen túl)?                                                                                                                                                                                                     |
-| v64        | A végzettség megszerzését követően tervez-e külföldi munkavállalást?                                                                                                                                                                                                                                                  |
-| v65        | Melyik országban?                                                                                                                                                                                                                                                                                                     |
-| v66        | A szakterületén tervezi a külföldi munkavállalást?                                                                                                                                                                                                                                                                    |
-| v67        | Ha Magyarországon maradna, akkor hol?                                                                                                                                                                                                                                                                                 |
-| v68        | Az előző kérdésre adott válasz tekintetében mely tényezőket tartja relevánsnak? \> Szellemi és kulturális közeg                                                                                                                                                                                                       |
-| v69        | Az előző kérdésre adott válasz tekintetében mely tényezőket tartja relevánsnak? \> Magasabb anyagi megbecsülés                                                                                                                                                                                                        |
-| v70        | Az előző kérdésre adott válasz tekintetében mely tényezőket tartja relevánsnak? \> Lakhatási és megélhetési kiadások                                                                                                                                                                                                  |
-| v71        | Az előző kérdésre adott válasz tekintetében mely tényezőket tartja relevánsnak? \> Családi kapcsolatok                                                                                                                                                                                                                |
-| v72        | Az előző kérdésre adott válasz tekintetében mely tényezőket tartja relevánsnak? \> Baráti kapcsolatok                                                                                                                                                                                                                 |
-| v73        | Az előző kérdésre adott válasz tekintetében mely tényezőket tartja relevánsnak? \> Szakmai kihívás és fejlődés lehetősége                                                                                                                                                                                             |
-| v74        | Állami ösztöndíjas, részösztöndíjas vagy önköltséges hallgató? (Ha többfajta képzésre is jár, akkor az erősebb ösztöndíj kategóriát jelölje meg\!)                                                                                                                                                                    |
-| v75        | Befolyásolja-e a röghöz kötés abban a döntésben, hogy tervez-e külföldi munkavállalást?                                                                                                                                                                                                                               |
-| v76        | Tudja-e, mit fed a sabbatical kifejezés?                                                                                                                                                                                                                                                                              |
-| v77        | Van-e igénye home office-ra?                                                                                                                                                                                                                                                                                          |
-| v78        | Milyen munkavégzés felel meg Önnek a legjobban?                                                                                                                                                                                                                                                                       |
-| v79        | Milyen gyakran váltana munkakört?                                                                                                                                                                                                                                                                                     |
-| v80        | Mennyire rugalmas a munkavégzés helyét illetően? Hol vállalna munkát?                                                                                                                                                                                                                                                 |
-| v81        | Segítene-e a gyermekvállalásban, ha tudná, hogy a munkahely rugalmasan kezeli azt (pl                                                                                                                                                                                                                                 |
-| v82        | Mennyire bízik abban, hogy eléri a következő 10 évre kitűzött karriercéljait?                                                                                                                                                                                                                                         |
-| v83        | Értékelje 0-tól 10-ig a következő munkahelyi szituációkat\! \> Kiemelt fizetés, napi 10-12 óra munka, akár hétvégeken is, nemzetközi munkakörnyezet, sok stressz, állandó rendelkezésre állás                                                                                                                         |
-| v84        | Értékelje 0-tól 10-ig a következő munkahelyi szituációkat\! \> Biztos állás, állandó feladatok, napi 8 óra munka, pozíciónak megfelelő átlagos fizetés                                                                                                                                                                |
-| v85        | Értékelje 0-tól 10-ig a következő munkahelyi szituációkat\! \> Rugalmas munkaidő, szakmai önállóság, nem hierarchikus munkaszervezet, horizontális karrierpályák, munkavégzéssel azonos bérezés, nincs fix jövedelem                                                                                                  |
-| v86        | Értékelje 0-tól 10-ig a következő munkahelyi szituációkat\! \> Szakmailag inspiráló munkakörnyezet, szakmai fejlődés folyamatos kényszere, változatos munka folyamatos kihívásokkal, nem kiemelkedő bérezés                                                                                                           |
-| v87        | Értékelje 0-tól 10-ig a következő munkahelyi szituációkat\! \> Felsővezetői pozíció, kiemelkedő bérezés, hatékony döntéselőkészítő csapat, stabil jövőkép                                                                                                                                                             |
-| v88        | Értékelje 0-tól 10-ig a következő munkahelyi szituációkat\! \> Nagyvállalat, minimális előrelépési lehetőség, hierarchikus szervezet, pozíciónak megfelelő átlagos fizetés, fizetetlen túlóra                                                                                                                         |
-| v89        | Értékelje 0-tól 10-ig a következőket\! \> Mennyire elégedett az életével mostanában?                                                                                                                                                                                                                                  |
-| v90        | Értékelje 0-tól 10-ig a következőket\! \> Mennyire elégedett az anyagi helyzetével?                                                                                                                                                                                                                                   |
-| v91        | Értékelje 0-tól 10-ig a következőket\! \> Mennyire elégedett a jelenlegi munkájával / tanulmányaival?                                                                                                                                                                                                                 |
-| v92        | Értékelje 0-tól 10-ig a következőket\! \> Mennyire elégedett a munkába (iskolába) járás körülményeivel?                                                                                                                                                                                                               |
-| v93        | Értékelje 0-tól 10-ig a következőket\! \> Mennyire elégedett azon idő mennyiségével, amelyet az Ön által kedvelt dolgokkal tölthet?                                                                                                                                                                                   |
-| v94        | Értékelje 0-tól 10-ig a következőket\! \> Összességében mennyire érzi tartalmasnak azokat a dolgokat, amiket csinál?                                                                                                                                                                                                  |
-| v95        | Értékelje 0-tól 10-ig a következőket\! \> Mennyire néz reményvesztetten vagy bizakodóan a jövőbe? (0: teljes mértékben reményvesztetten, 10: teljes mértékben bizakodóan)                                                                                                                                             |
-| v96        | Mostanában milyen gyakran volt boldog?                                                                                                                                                                                                                                                                                |
-| v97        | Mostanában milyen gyakran volt stresszes?                                                                                                                                                                                                                                                                             |
-| v98        | Mostanában milyen gyakran érezte magát magányosnak?                                                                                                                                                                                                                                                                   |
-| v99        | Értékelje 0-tól 10-ig a következőket\! \> Ön szerint mennyire lehet megbízni az emberekben általában?                                                                                                                                                                                                                 |
-| v100       | Értékelje 0-tól 10-ig a következőket\! \> Mennyire bízik meg Ön személy szerint a politikai rendszerben?                                                                                                                                                                                                              |
-| v101       | Értékelje 0-tól 10-ig a következőket\! \> Mennyire bízik meg Ön személy szerint a jogrendszerben?                                                                                                                                                                                                                     |
-| v102       | Értékelje 0-tól 10-ig a következőket\! \> Mennyire bízik meg Ön személy szerint a rendőrségben?                                                                                                                                                                                                                       |
-| v103       | Értékelje 0-tól 10-ig a következőket\! \> Mennyire bízik meg Ön személy szerint a honvédségben?                                                                                                                                                                                                                       |
-
-Változókhoz tartozó kérdések
-
-``` r
-skimr::skim(survey)
-```
-
-|                                                  |        |
-| :----------------------------------------------- | :----- |
-| Name                                             | survey |
-| Number of rows                                   | 417    |
-| Number of columns                                | 103    |
-| \_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_   |        |
-| Column type frequency:                           |        |
-| factor                                           | 101    |
-| numeric                                          | 2      |
-| \_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_ |        |
-| Group variables                                  | None   |
+|                                                  |            |
+| :----------------------------------------------- | :--------- |
+| Name                                             | Piped data |
+| Number of rows                                   | 417        |
+| Number of columns                                | 103        |
+| \_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_   |            |
+| Column type frequency:                           |            |
+| factor                                           | 101        |
+| numeric                                          | 2          |
+| \_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_ |            |
+| Group variables                                  | None       |
 
 Data summary
 
 **Variable type: factor**
 
-| skim\_variable | n\_missing | complete\_rate | ordered | n\_unique | top\_counts                          |
-| :------------- | ---------: | -------------: | :------ | --------: | :----------------------------------- |
-| v1             |          0 |           1.00 | FALSE   |         2 | Nő: 253, Fér: 164                    |
-| v2             |          3 |           0.99 | FALSE   |        21 | Bud: 156, Pes: 66, Haj: 23, Sza: 19  |
-| v3             |          2 |           1.00 | FALSE   |         5 | egy: 180, köz: 99, fői: 94, sza: 41  |
-| v4             |          6 |           0.99 | FALSE   |        16 | Bud: 146, Bud: 58, Bud: 44, Deb: 31  |
-| v5             |          0 |           1.00 | FALSE   |         5 | ala: 302, mes: 75, osz: 33, egy: 5   |
-| v6             |          0 |           1.00 | FALSE   |        14 | gaz: 215, inf: 54, tár: 36, műs: 21  |
-| v7             |          0 |           1.00 | FALSE   |         3 | ige: 211, nem: 136, ige: 70          |
-| v8             |          1 |           1.00 | FALSE   |         4 | köz: 193, fel: 176, ala: 44, nin: 3  |
-| v9             |          0 |           1.00 | FALSE   |         4 | nin: 176, ala: 126, köz: 84, fel: 31 |
-| v10            |          0 |           1.00 | FALSE   |         2 | ige: 313, nem: 104                   |
-| v11            |        101 |           0.76 | FALSE   |         2 | nem: 181, ige: 135                   |
-| v12            |        107 |           0.74 | FALSE   |         3 | fél: 196, 3 h: 68, 3 h: 46           |
-| v13            |        377 |           0.10 | FALSE   |         1 | KKV: 40                              |
-| v14            |        394 |           0.06 | FALSE   |         1 | mag: 23                              |
-| v15            |        353 |           0.15 | FALSE   |         1 | mul: 64                              |
-| v16            |        406 |           0.03 | FALSE   |         1 | köz: 11                              |
-| v17            |        398 |           0.05 | FALSE   |         1 | egy: 19                              |
-| v18            |          2 |           1.00 | FALSE   |         4 | 5: 208, 4: 167, 3: 36, 2: 4          |
-| v19            |          3 |           0.99 | FALSE   |         5 | 5: 242, 4: 135, 3: 26, 2: 8          |
-| v20            |          3 |           0.99 | FALSE   |         5 | 5: 301, 4: 91, 3: 19, 2: 2           |
-| v21            |          2 |           1.00 | FALSE   |         5 | 5: 224, 4: 150, 3: 34, 2: 6          |
-| v22            |          2 |           1.00 | FALSE   |         5 | 4: 177, 5: 149, 3: 75, 2: 12         |
-| v23            |          2 |           1.00 | FALSE   |         5 | 4: 143, 3: 134, 2: 61, 5: 56         |
-| v24            |          2 |           1.00 | FALSE   |         5 | 3: 156, 4: 97, 2: 93, 1: 38          |
-| v25            |          2 |           1.00 | FALSE   |         5 | 3: 141, 2: 103, 1: 83, 4: 64         |
-| v26            |          2 |           1.00 | FALSE   |         5 | 4: 114, 3: 111, 5: 90, 2: 63         |
-| v27            |          2 |           1.00 | FALSE   |         5 | 4: 136, 3: 116, 5: 113, 2: 35        |
-| v28            |          2 |           1.00 | FALSE   |         5 | 5: 152, 4: 117, 3: 96, 2: 39         |
-| v29            |          3 |           0.99 | FALSE   |         5 | 4: 141, 5: 138, 3: 91, 2: 29         |
-| v30            |          4 |           0.99 | FALSE   |         5 | 4: 144, 5: 107, 3: 102, 2: 40        |
-| v31            |          2 |           1.00 | FALSE   |         5 | 5: 158, 4: 142, 3: 83, 2: 22         |
-| v32            |          2 |           1.00 | FALSE   |         5 | 5: 257, 4: 119, 3: 31, 2: 6          |
-| v33            |          3 |           0.99 | FALSE   |         5 | 5: 161, 4: 149, 3: 78, 2: 21         |
-| v34            |          2 |           1.00 | FALSE   |         5 | 5: 163, 4: 148, 3: 70, 2: 22         |
-| v35            |          3 |           0.99 | FALSE   |         5 | 4: 151, 5: 135, 3: 103, 2: 18        |
-| v36            |          4 |           0.99 | FALSE   |         5 | 4: 133, 5: 127, 3: 117, 2: 27        |
-| v37            |          1 |           1.00 | FALSE   |         5 | 4: 161, 5: 133, 3: 92, 2: 24         |
-| v38            |          1 |           1.00 | FALSE   |         5 | 4: 159, 3: 135, 5: 64, 2: 48         |
-| v39            |          1 |           1.00 | FALSE   |         5 | 5: 165, 4: 143, 3: 76, 2: 28         |
-| v40            |          1 |           1.00 | FALSE   |         5 | 4: 142, 5: 127, 3: 104, 2: 32        |
-| v41            |          1 |           1.00 | FALSE   |         5 | 5: 267, 4: 90, 3: 40, 2: 14          |
-| v42            |          2 |           1.00 | FALSE   |         5 | 4: 163, 5: 138, 3: 91, 2: 15         |
-| v43            |          1 |           1.00 | FALSE   |         5 | 3: 121, 5: 118, 4: 112, 2: 51        |
-| v44            |          1 |           1.00 | FALSE   |         5 | 4: 132, 5: 126, 3: 111, 2: 30        |
-| v45            |          1 |           1.00 | FALSE   |         2 | Hoz: 385, Mun: 31                    |
-| v46            |          1 |           1.00 | FALSE   |         2 | Mul: 331, Up : 85                    |
-| v47            |         13 |           0.97 | FALSE   |         4 | 1: 236, 2: 86, 3: 52, 4: 30          |
-| v48            |         13 |           0.97 | FALSE   |         4 | 2: 181, 3: 95, 1: 72, 4: 56          |
-| v49            |         13 |           0.97 | FALSE   |         4 | 3: 158, 4: 101, 1: 77, 2: 68         |
-| v50            |         13 |           0.97 | FALSE   |         4 | 4: 217, 3: 99, 2: 69, 1: 19          |
-| v51            |          1 |           1.00 | FALSE   |         5 | 2-3: 179, 4-5: 155, 6-8: 42, 1 f: 23 |
-| v52            |          1 |           1.00 | FALSE   |         6 | het: 197, het: 133, hav: 39, nap: 25 |
-| v53            |          2 |           1.00 | FALSE   |         2 | ige: 238, nem: 177                   |
-| v54            |        305 |           0.27 | FALSE   |         1 | pla: 112                             |
-| v55            |        227 |           0.46 | FALSE   |         1 | táv: 190                             |
-| v56            |        278 |           0.33 | FALSE   |         1 | rés: 139                             |
-| v57            |        194 |           0.53 | FALSE   |         1 | saj: 223                             |
-| v58            |        186 |           0.55 | FALSE   |         1 | nem: 231                             |
-| v61            |          1 |           1.00 | FALSE   |         4 | 1,5: 219, 2 -: 137, 1 -: 38, nem: 22 |
-| v62            |          3 |           0.99 | FALSE   |         4 | köz: 246, füg: 95, beo: 43, fel: 30  |
-| v63            |          1 |           1.00 | FALSE   |         4 | 5: 230, 4: 143, 3: 36, 2: 7          |
-| v64            |          1 |           1.00 | FALSE   |         3 | még: 180, ige: 132, nem: 104         |
-| v65            |        289 |           0.31 | FALSE   |        14 | Ame: 21, Egy: 14, Aus: 13, egy: 12   |
-| v66            |        286 |           0.31 | FALSE   |         2 | ige: 120, nem: 11                    |
-| v67            |          4 |           0.99 | FALSE   |         4 | ann: 188, áll: 156, a m: 37, eze: 32 |
-| v68            |        188 |           0.55 | FALSE   |         1 | Sze: 229                             |
-| v69            |        177 |           0.58 | FALSE   |         1 | Mag: 240                             |
-| v70            |        199 |           0.52 | FALSE   |         1 | Lak: 218                             |
-| v71            |        160 |           0.62 | FALSE   |         1 | Csa: 257                             |
-| v72            |        153 |           0.63 | FALSE   |         1 | Bar: 264                             |
-| v73            |        154 |           0.63 | FALSE   |         1 | Sza: 263                             |
-| v74            |          2 |           1.00 | FALSE   |         3 | áll: 318, önk: 91, rés: 6            |
-| v75            |         93 |           0.78 | FALSE   |         2 | nem: 259, ige: 65                    |
-| v76            |          2 |           1.00 | FALSE   |         2 | nem: 344, ige: 71                    |
-| v77            |          1 |           1.00 | FALSE   |         4 | ige: 165, ige: 115, nem: 95, ige: 41 |
-| v78            |          2 |           1.00 | FALSE   |         3 | biz: 315, tel: 59, fix: 41           |
-| v79            |          2 |           1.00 | FALSE   |         4 | 3-8: 273, 1-2: 66, 8-1: 45, soh: 31  |
-| v80            |          2 |           1.00 | FALSE   |         4 | kül: 177, a k: 120, egy: 64, táv: 54 |
-| v81            |          2 |           1.00 | FALSE   |         2 | ige: 369, nem: 46                    |
-| v82            |          3 |           0.99 | FALSE   |        11 | 8: 89, 10: 86, 7: 79, 6: 37          |
-| v83            |          5 |           0.99 | FALSE   |        11 | 0: 58, 2: 56, 1: 54, 3: 51           |
-| v84            |          5 |           0.99 | FALSE   |        11 | 7: 84, 8: 61, 6: 55, 5: 50           |
-| v85            |          6 |           0.99 | FALSE   |        11 | 8: 80, 7: 73, 6: 52, 5: 46           |
-| v86            |          5 |           0.99 | FALSE   |        11 | 7: 76, 6: 63, 8: 63, 5: 48           |
-| v87            |          6 |           0.99 | FALSE   |        11 | 10: 169, 9: 90, 8: 53, 7: 23         |
-| v88            |          6 |           0.99 | FALSE   |        11 | 0: 87, 3: 60, 2: 57, 1: 52           |
-| v89            |          4 |           0.99 | FALSE   |        11 | 8: 124, 7: 75, 9: 60, 6: 45          |
-| v90            |          4 |           0.99 | FALSE   |        11 | 8: 75, 6: 68, 7: 63, 9: 42           |
-| v91            |          4 |           0.99 | FALSE   |        11 | 8: 83, 7: 71, 9: 69, 10: 59          |
-| v92            |          3 |           0.99 | FALSE   |        11 | 9: 77, 8: 74, 10: 66, 7: 51          |
-| v93            |          3 |           0.99 | FALSE   |        11 | 8: 63, 7: 60, 6: 49, 9: 46           |
-| v94            |          3 |           0.99 | FALSE   |        11 | 8: 84, 7: 80, 9: 64, 6: 45           |
-| v95            |          3 |           0.99 | FALSE   |        11 | 10: 107, 8: 92, 7: 62, 9: 48         |
-| v96            |          4 |           0.99 | FALSE   |         5 | töb: 216, idő: 92, min: 67, rit: 36  |
-| v97            |          4 |           0.99 | FALSE   |         5 | töb: 216, idő: 92, min: 67, rit: 36  |
-| v98            |          4 |           0.99 | FALSE   |         5 | töb: 216, idő: 92, min: 67, rit: 36  |
-| v99            |          3 |           0.99 | FALSE   |        11 | 7: 101, 6: 80, 5: 60, 8: 46          |
-| v100           |          3 |           0.99 | FALSE   |        11 | 0: 101, 2: 65, 3: 49, 1: 48          |
-| v101           |          3 |           0.99 | FALSE   |        11 | 5: 60, 6: 59, 4: 49, 3: 48           |
-| v102           |          3 |           0.99 | FALSE   |        11 | 5: 62, 6: 51, 7: 51, 3: 46           |
-| v103           |          3 |           0.99 | FALSE   |        11 | 5: 62, 7: 54, 8: 53, 4: 48           |
+| skim\_variable                                                                                                                                                                                                                                                                                                             | n\_missing | complete\_rate | ordered | n\_unique | top\_counts                          |
+| :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------: | -------------: | :------ | --------: | :----------------------------------- |
+| v1: Nem                                                                                                                                                                                                                                                                                                                    |          0 |           1.00 | FALSE   |         2 | Nő: 253, Fér: 164                    |
+| v2: Hol van az állandó lakcíme?                                                                                                                                                                                                                                                                                            |          3 |           0.99 | FALSE   |        21 | Bud: 156, Pes: 66, Haj: 23, Sza: 19  |
+| v3: A szülei végzettségei közül melyik a legmagasabb?                                                                                                                                                                                                                                                                      |          2 |           1.00 | FALSE   |         5 | egy: 180, köz: 99, fői: 94, sza: 41  |
+| v4: Melyik felsőoktatási intézményben tanul?                                                                                                                                                                                                                                                                               |          6 |           0.99 | FALSE   |        16 | Bud: 146, Bud: 58, Bud: 44, Deb: 31  |
+| v5: Milyen képzésre jár ezen az egyetemen? (Ha többfélére is, akkor a legfontosabbnak tartottat jelölje meg\!)                                                                                                                                                                                                             |          0 |           1.00 | FALSE   |         5 | ala: 302, mes: 75, osz: 33, egy: 5   |
+| v6: Milyen képzésterületre jár? (Ha többre is, akkor a legfontosabbnak tartottat adja meg\!)                                                                                                                                                                                                                               |          0 |           1.00 | FALSE   |        14 | gaz: 215, inf: 54, tár: 36, műs: 21  |
+| v7: Tervezi-e, hogy jelenlegi képzése(i) után folytatja a tanulmányait?                                                                                                                                                                                                                                                    |          0 |           1.00 | FALSE   |         3 | ige: 211, nem: 136, ige: 70          |
+| v8: Milyen szintű az angol nyelvtudása?                                                                                                                                                                                                                                                                                    |          1 |           1.00 | FALSE   |         4 | köz: 193, fel: 176, ala: 44, nin: 3  |
+| v9: Milyen szintű a német nyelvtudása?                                                                                                                                                                                                                                                                                     |          0 |           1.00 | FALSE   |         4 | nin: 176, ala: 126, köz: 84, fel: 31 |
+| v10: Volt-e már munkaviszonya?                                                                                                                                                                                                                                                                                             |          0 |           1.00 | FALSE   |         2 | ige: 313, nem: 104                   |
+| v11: A munkaviszonya az Ön által legfontosabbnak tartott szakterületéhez kapcsolódott-e?                                                                                                                                                                                                                                   |        101 |           0.76 | FALSE   |         2 | nem: 181, ige: 135                   |
+| v12: Milyen hosszan tartott? (Ha több is volt, összesítve adja meg\!)                                                                                                                                                                                                                                                      |        107 |           0.74 | FALSE   |         3 | fél: 196, 3 h: 68, 3 h: 46           |
+| v13: Milyen típusú cégnél dolgozott? \> KKV                                                                                                                                                                                                                                                                                |        377 |           0.10 | FALSE   |         1 | KKV: 40                              |
+| v14: Milyen típusú cégnél dolgozott? \> magyar nagyvállalat                                                                                                                                                                                                                                                                |        394 |           0.06 | FALSE   |         1 | mag: 23                              |
+| v15: Milyen típusú cégnél dolgozott? \> multinacionális vállalat                                                                                                                                                                                                                                                           |        353 |           0.15 | FALSE   |         1 | mul: 64                              |
+| v16: Milyen típusú cégnél dolgozott? \> közszféra                                                                                                                                                                                                                                                                          |        406 |           0.03 | FALSE   |         1 | köz: 11                              |
+| v17: Milyen típusú cégnél dolgozott? \> egyéb                                                                                                                                                                                                                                                                              |        398 |           0.05 | FALSE   |         1 | egy: 19                              |
+| v18: Mennyire tartja fontosnak az alábbi szempontokat egy munkahely kapcsán? (1: egyáltalán nem fontos - 5: nagyon fontos) \> Magas bér és juttatások                                                                                                                                                                      |          2 |           1.00 | FALSE   |         4 | 5: 208, 4: 167, 3: 36, 2: 4          |
+| v19: Mennyire tartja fontosnak az alábbi szempontokat egy munkahely kapcsán? (1: egyáltalán nem fontos - 5: nagyon fontos) \> Előmenetel lehetősége                                                                                                                                                                        |          3 |           0.99 | FALSE   |         5 | 5: 242, 4: 135, 3: 26, 2: 8          |
+| v20: Mennyire tartja fontosnak az alábbi szempontokat egy munkahely kapcsán? (1: egyáltalán nem fontos - 5: nagyon fontos) \> Szakmai fejlődés                                                                                                                                                                             |          3 |           0.99 | FALSE   |         5 | 5: 301, 4: 91, 3: 19, 2: 2           |
+| v21: Mennyire tartja fontosnak az alábbi szempontokat egy munkahely kapcsán? (1: egyáltalán nem fontos - 5: nagyon fontos) \> Változatos munkavégzés, szakmai kihívások                                                                                                                                                    |          2 |           1.00 | FALSE   |         5 | 5: 224, 4: 150, 3: 34, 2: 6          |
+| v22: Mennyire tartja fontosnak az alábbi szempontokat egy munkahely kapcsán? (1: egyáltalán nem fontos - 5: nagyon fontos) \> Munkahelyi környezet (iroda, felszereltség)                                                                                                                                                  |          2 |           1.00 | FALSE   |         5 | 4: 177, 5: 149, 3: 75, 2: 12         |
+| v23: Mennyire tartja fontosnak az alábbi szempontokat egy munkahely kapcsán? (1: egyáltalán nem fontos - 5: nagyon fontos) \> Vállalat hírneve, presztízse, tevékenysége                                                                                                                                                   |          2 |           1.00 | FALSE   |         5 | 4: 143, 3: 134, 2: 61, 5: 56         |
+| v24: Mennyire tartja fontosnak az alábbi szempontokat egy munkahely kapcsán? (1: egyáltalán nem fontos - 5: nagyon fontos) \> Vállalati struktúra (KKV, multinacionális vállalat)                                                                                                                                          |          2 |           1.00 | FALSE   |         5 | 3: 156, 4: 97, 2: 93, 1: 38          |
+| v25: Mennyire tartja fontosnak az alábbi szempontokat egy munkahely kapcsán? (1: egyáltalán nem fontos - 5: nagyon fontos) \> Lakhatási támogatás                                                                                                                                                                          |          2 |           1.00 | FALSE   |         5 | 3: 141, 2: 103, 1: 83, 4: 64         |
+| v26: Mennyire tartja fontosnak az alábbi szempontokat egy munkahely kapcsán? (1: egyáltalán nem fontos - 5: nagyon fontos) \> Külföldi tapasztalatszerzés lehetősége                                                                                                                                                       |          2 |           1.00 | FALSE   |         5 | 4: 114, 3: 111, 5: 90, 2: 63         |
+| v27: Mennyire tartja fontosnak az alábbi szempontokat egy munkahely kapcsán? (1: egyáltalán nem fontos - 5: nagyon fontos) \> A csapatmunka                                                                                                                                                                                |          2 |           1.00 | FALSE   |         5 | 4: 136, 3: 116, 5: 113, 2: 35        |
+| v28: Mennyire tartja fontosnak az alábbi szempontokat egy munkahely kapcsán? (1: egyáltalán nem fontos - 5: nagyon fontos) \> Hogy kollégái között barátokat is találjon                                                                                                                                                   |          2 |           1.00 | FALSE   |         5 | 5: 152, 4: 117, 3: 96, 2: 39         |
+| v29: Mennyire tartja fontosnak az alábbi szempontokat egy munkahely kapcsán? (1: egyáltalán nem fontos - 5: nagyon fontos) \> Hogy Ön és kollégái azonosuljanak a cég céljaival és értékrendjével                                                                                                                          |          3 |           0.99 | FALSE   |         5 | 4: 141, 5: 138, 3: 91, 2: 29         |
+| v30: Mennyire tartja fontosnak az alábbi szempontokat egy munkahely kapcsán? (1: egyáltalán nem fontos - 5: nagyon fontos) \> Hogy kollégáival együtt fejlődjön                                                                                                                                                            |          4 |           0.99 | FALSE   |         5 | 4: 144, 5: 107, 3: 102, 2: 40        |
+| v31: Mennyire tartja fontosnak az alábbi szempontokat egy munkahely kapcsán? (1: egyáltalán nem fontos - 5: nagyon fontos) \> Hogy legyenek olyan kezdeményezések, amelyek sikeresen biztosítják a munkavállalók testi és lelki jólétét                                                                                    |          2 |           1.00 | FALSE   |         5 | 5: 158, 4: 142, 3: 83, 2: 22         |
+| v32: Mennyire tartja fontosnak az alábbi szempontokat egy munkahely kapcsán? (1: egyáltalán nem fontos - 5: nagyon fontos) \> Hogy a munkaterhelés a munkaidő alatt kezelhető legyen, így a munkavállalók teljes mértékben kihasználhassák a pihenőidőt, és munkahelyi nyomás nélkül lazíthassanak esténként és hétvégeken |          2 |           1.00 | FALSE   |         5 | 5: 257, 4: 119, 3: 31, 2: 6          |
+| v33: Mennyire tartja fontosnak az alábbi szempontokat egy munkahely kapcsán? (1: egyáltalán nem fontos - 5: nagyon fontos) \> Olyan munkakörnyezet megléte, amely elősegíti a jólétet (például a pihenésre, a felüdülésre alkalmas terek), és alkalmazkodik a különféle munkastílusokhoz                                   |          3 |           0.99 | FALSE   |         5 | 5: 161, 4: 149, 3: 78, 2: 21         |
+| v34: Mennyire tartja fontosnak az alábbi szempontokat egy munkahely kapcsán? (1: egyáltalán nem fontos - 5: nagyon fontos) \> Hogy a munkahely aktívan támogassa a táv- és a virtuális munkát mindazoknak, akiknek a munkalehetősége lehetővé teszi                                                                        |          2 |           1.00 | FALSE   |         5 | 5: 163, 4: 148, 3: 70, 2: 22         |
+| v35: Mennyire tartja fontosnak az alábbi szempontokat egy munkahely kapcsán? (1: egyáltalán nem fontos - 5: nagyon fontos) \> Hogy a munkavállaló szabadon dönthessen arról, hogy hogyan strukturálja a munkáját                                                                                                           |          3 |           0.99 | FALSE   |         5 | 4: 151, 5: 135, 3: 103, 2: 18        |
+| v36: Mennyire tartja fontosnak az alábbi szempontokat egy munkahely kapcsán? (1: egyáltalán nem fontos - 5: nagyon fontos) \> Hogy legyen egy virtuális platform, amely elősegíti a kollégákkal való együttműködést                                                                                                        |          4 |           0.99 | FALSE   |         5 | 4: 133, 5: 127, 3: 117, 2: 27        |
+| v37: Melyik tényezők miatt mondana fel egy munkahelyen? (1: emiatt nem mondanék fel - 5: emiatt mindenképpen felmondanék) \> A munkámat nem ismerik el                                                                                                                                                                     |          1 |           1.00 | FALSE   |         5 | 4: 161, 5: 133, 3: 92, 2: 24         |
+| v38: Melyik tényezők miatt mondana fel egy munkahelyen? (1: emiatt nem mondanék fel - 5: emiatt mindenképpen felmondanék) \> A béremelés kicsiny mértéke, elmaradása                                                                                                                                                       |          1 |           1.00 | FALSE   |         5 | 4: 159, 3: 135, 5: 64, 2: 48         |
+| v39: Melyik tényezők miatt mondana fel egy munkahelyen? (1: emiatt nem mondanék fel - 5: emiatt mindenképpen felmondanék) \> Ha az előrejutás nem szakmai szempontok alapján történik                                                                                                                                      |          1 |           1.00 | FALSE   |         5 | 5: 165, 4: 143, 3: 76, 2: 28         |
+| v40: Melyik tényezők miatt mondana fel egy munkahelyen? (1: emiatt nem mondanék fel - 5: emiatt mindenképpen felmondanék) \> Sok túlóra, nagy leterheltség                                                                                                                                                                 |          1 |           1.00 | FALSE   |         5 | 4: 142, 5: 127, 3: 104, 2: 32        |
+| v41: Melyik tényezők miatt mondana fel egy munkahelyen? (1: emiatt nem mondanék fel - 5: emiatt mindenképpen felmondanék) \> Túlórák ki nem fizetése                                                                                                                                                                       |          1 |           1.00 | FALSE   |         5 | 5: 267, 4: 90, 3: 40, 2: 14          |
+| v42: Melyik tényezők miatt mondana fel egy munkahelyen? (1: emiatt nem mondanék fel - 5: emiatt mindenképpen felmondanék) \> Szakmailag nem megfelelő környezet                                                                                                                                                            |          2 |           1.00 | FALSE   |         5 | 4: 163, 5: 138, 3: 91, 2: 15         |
+| v43: Melyik tényezők miatt mondana fel egy munkahelyen? (1: emiatt nem mondanék fel - 5: emiatt mindenképpen felmondanék) \> Monoton munka, kevés kihívás                                                                                                                                                                  |          1 |           1.00 | FALSE   |         5 | 3: 121, 5: 118, 4: 112, 2: 51        |
+| v44: Melyik tényezők miatt mondana fel egy munkahelyen? (1: emiatt nem mondanék fel - 5: emiatt mindenképpen felmondanék) \> Legalább 20%-kal magasabb bérajánlat máshonnan                                                                                                                                                |          1 |           1.00 | FALSE   |         5 | 4: 132, 5: 126, 3: 111, 2: 30        |
+| v45: Melyiket tartja fontosabbnak? (Hozzáadott érték vagy munkaidő kitöltése)                                                                                                                                                                                                                                              |          1 |           1.00 | FALSE   |         2 | Hoz: 385, Mun: 31                    |
+| v46: Melyiket tartja fontosabbnak? (Multiple career path vagy Up or out)                                                                                                                                                                                                                                                   |          1 |           1.00 | FALSE   |         2 | Mul: 331, Up : 85                    |
+| v47: Állítsa fontosság szerint sorrendbe az alábbiakat\! Előre kerüljön az Ön szerint legfontosabb\! \> Munka és magánélet egyensúlya                                                                                                                                                                                      |         13 |           0.97 | FALSE   |         4 | 1: 236, 2: 86, 3: 52, 4: 30          |
+| v48: Állítsa fontosság szerint sorrendbe az alábbiakat\! Előre kerüljön az Ön szerint legfontosabb\! \> Fizetés                                                                                                                                                                                                            |         13 |           0.97 | FALSE   |         4 | 2: 181, 3: 95, 1: 72, 4: 56          |
+| v49: Állítsa fontosság szerint sorrendbe az alábbiakat\! Előre kerüljön az Ön szerint legfontosabb\! \> Szakmai előrehaladás                                                                                                                                                                                               |         13 |           0.97 | FALSE   |         4 | 3: 158, 4: 101, 1: 77, 2: 68         |
+| v50: Állítsa fontosság szerint sorrendbe az alábbiakat\! Előre kerüljön az Ön szerint legfontosabb\! \> Szociális kapcsolatok                                                                                                                                                                                              |         13 |           0.97 | FALSE   |         4 | 4: 217, 3: 99, 2: 69, 1: 19          |
+| v51: Mit tartana ideálisnak, hányan dolgozzanak egy helyiségben?                                                                                                                                                                                                                                                           |          1 |           1.00 | FALSE   |         5 | 2-3: 179, 4-5: 155, 6-8: 42, 1 f: 23 |
+| v52: Mit tart ideálisnak a meetingek gyakoriságára vonatkozóan?                                                                                                                                                                                                                                                            |          1 |           1.00 | FALSE   |         6 | het: 197, het: 133, hav: 39, nap: 25 |
+| v53: Igényelné-e az állandó online kapcsolattartást a kollégákkal?                                                                                                                                                                                                                                                         |          2 |           1.00 | FALSE   |         2 | ige: 238, nem: 177                   |
+| v54: Az alábbi atipikus foglalkozási formák közül melyik érdekelné? \> platform alapú                                                                                                                                                                                                                                      |        305 |           0.27 | FALSE   |         1 | pla: 112                             |
+| v55: Az alábbi atipikus foglalkozási formák közül melyik érdekelné? \> távmunka                                                                                                                                                                                                                                            |        227 |           0.46 | FALSE   |         1 | táv: 190                             |
+| v56: Az alábbi atipikus foglalkozási formák közül melyik érdekelné? \> részmunka                                                                                                                                                                                                                                           |        278 |           0.33 | FALSE   |         1 | rés: 139                             |
+| v57: Az alábbi atipikus foglalkozási formák közül melyik érdekelné? \> saját vállalkozás indítása (startup)                                                                                                                                                                                                                |        194 |           0.53 | FALSE   |         1 | saj: 223                             |
+| v58: Az alábbi atipikus foglalkozási formák közül melyik érdekelné? \> nem helyhez kötött munkavégzés                                                                                                                                                                                                                      |        186 |           0.55 | FALSE   |         1 | nem: 231                             |
+| v61: 5 év elteltével a kezdőfizetése hányszorosával lenne elégedett?                                                                                                                                                                                                                                                       |          1 |           1.00 | FALSE   |         4 | 1,5: 219, 2 -: 137, 1 -: 38, nem: 22 |
+| v62: 5 év elteltével milyen beosztást szeretne elérni?                                                                                                                                                                                                                                                                     |          3 |           0.99 | FALSE   |         4 | köz: 246, füg: 95, beo: 43, fel: 30  |
+| v63: Mennyire fontos önnek, hogy 5 év alatt jelentős szakmai fejlődést produkáljon (anyagiakon és előremenetelen túl)?                                                                                                                                                                                                     |          1 |           1.00 | FALSE   |         4 | 5: 230, 4: 143, 3: 36, 2: 7          |
+| v64: A végzettség megszerzését követően tervez-e külföldi munkavállalást?                                                                                                                                                                                                                                                  |          1 |           1.00 | FALSE   |         3 | még: 180, ige: 132, nem: 104         |
+| v65: Melyik országban?                                                                                                                                                                                                                                                                                                     |        289 |           0.31 | FALSE   |        14 | Ame: 21, Egy: 14, Aus: 13, egy: 12   |
+| v66: A szakterületén tervezi a külföldi munkavállalást?                                                                                                                                                                                                                                                                    |        286 |           0.31 | FALSE   |         2 | ige: 120, nem: 11                    |
+| v67: Ha Magyarországon maradna, akkor hol?                                                                                                                                                                                                                                                                                 |          4 |           0.99 | FALSE   |         4 | ann: 188, áll: 156, a m: 37, eze: 32 |
+| v68: Az előző kérdésre adott válasz tekintetében mely tényezőket tartja relevánsnak? \> Szellemi és kulturális közeg                                                                                                                                                                                                       |        188 |           0.55 | FALSE   |         1 | Sze: 229                             |
+| v69: Az előző kérdésre adott válasz tekintetében mely tényezőket tartja relevánsnak? \> Magasabb anyagi megbecsülés                                                                                                                                                                                                        |        177 |           0.58 | FALSE   |         1 | Mag: 240                             |
+| v70: Az előző kérdésre adott válasz tekintetében mely tényezőket tartja relevánsnak? \> Lakhatási és megélhetési kiadások                                                                                                                                                                                                  |        199 |           0.52 | FALSE   |         1 | Lak: 218                             |
+| v71: Az előző kérdésre adott válasz tekintetében mely tényezőket tartja relevánsnak? \> Családi kapcsolatok                                                                                                                                                                                                                |        160 |           0.62 | FALSE   |         1 | Csa: 257                             |
+| v72: Az előző kérdésre adott válasz tekintetében mely tényezőket tartja relevánsnak? \> Baráti kapcsolatok                                                                                                                                                                                                                 |        153 |           0.63 | FALSE   |         1 | Bar: 264                             |
+| v73: Az előző kérdésre adott válasz tekintetében mely tényezőket tartja relevánsnak? \> Szakmai kihívás és fejlődés lehetősége                                                                                                                                                                                             |        154 |           0.63 | FALSE   |         1 | Sza: 263                             |
+| v74: Állami ösztöndíjas, részösztöndíjas vagy önköltséges hallgató? (Ha többfajta képzésre is jár, akkor az erősebb ösztöndíj kategóriát jelölje meg\!)                                                                                                                                                                    |          2 |           1.00 | FALSE   |         3 | áll: 318, önk: 91, rés: 6            |
+| v75: Befolyásolja-e a röghöz kötés abban a döntésben, hogy tervez-e külföldi munkavállalást?                                                                                                                                                                                                                               |         93 |           0.78 | FALSE   |         2 | nem: 259, ige: 65                    |
+| v76: Tudja-e, mit fed a sabbatical kifejezés?                                                                                                                                                                                                                                                                              |          2 |           1.00 | FALSE   |         2 | nem: 344, ige: 71                    |
+| v77: Van-e igénye home office-ra?                                                                                                                                                                                                                                                                                          |          1 |           1.00 | FALSE   |         4 | ige: 165, ige: 115, nem: 95, ige: 41 |
+| v78: Milyen munkavégzés felel meg Önnek a legjobban?                                                                                                                                                                                                                                                                       |          2 |           1.00 | FALSE   |         3 | biz: 315, tel: 59, fix: 41           |
+| v79: Milyen gyakran váltana munkakört?                                                                                                                                                                                                                                                                                     |          2 |           1.00 | FALSE   |         4 | 3-8: 273, 1-2: 66, 8-1: 45, soh: 31  |
+| v80: Mennyire rugalmas a munkavégzés helyét illetően? Hol vállalna munkát?                                                                                                                                                                                                                                                 |          2 |           1.00 | FALSE   |         4 | kül: 177, a k: 120, egy: 64, táv: 54 |
+| v81: Segítene-e a gyermekvállalásban, ha tudná, hogy a munkahely rugalmasan kezeli azt (pl                                                                                                                                                                                                                                 |          2 |           1.00 | FALSE   |         2 | ige: 369, nem: 46                    |
+| v82: Mennyire bízik abban, hogy eléri a következő 10 évre kitűzött karriercéljait?                                                                                                                                                                                                                                         |          3 |           0.99 | FALSE   |        11 | 8: 89, 10: 86, 7: 79, 6: 37          |
+| v83: Értékelje 0-tól 10-ig a következő munkahelyi szituációkat\! \> Kiemelt fizetés, napi 10-12 óra munka, akár hétvégeken is, nemzetközi munkakörnyezet, sok stressz, állandó rendelkezésre állás                                                                                                                         |          5 |           0.99 | FALSE   |        11 | 0: 58, 2: 56, 1: 54, 3: 51           |
+| v84: Értékelje 0-tól 10-ig a következő munkahelyi szituációkat\! \> Biztos állás, állandó feladatok, napi 8 óra munka, pozíciónak megfelelő átlagos fizetés                                                                                                                                                                |          5 |           0.99 | FALSE   |        11 | 7: 84, 8: 61, 6: 55, 5: 50           |
+| v85: Értékelje 0-tól 10-ig a következő munkahelyi szituációkat\! \> Rugalmas munkaidő, szakmai önállóság, nem hierarchikus munkaszervezet, horizontális karrierpályák, munkavégzéssel azonos bérezés, nincs fix jövedelem                                                                                                  |          6 |           0.99 | FALSE   |        11 | 8: 80, 7: 73, 6: 52, 5: 46           |
+| v86: Értékelje 0-tól 10-ig a következő munkahelyi szituációkat\! \> Szakmailag inspiráló munkakörnyezet, szakmai fejlődés folyamatos kényszere, változatos munka folyamatos kihívásokkal, nem kiemelkedő bérezés                                                                                                           |          5 |           0.99 | FALSE   |        11 | 7: 76, 6: 63, 8: 63, 5: 48           |
+| v87: Értékelje 0-tól 10-ig a következő munkahelyi szituációkat\! \> Felsővezetői pozíció, kiemelkedő bérezés, hatékony döntéselőkészítő csapat, stabil jövőkép                                                                                                                                                             |          6 |           0.99 | FALSE   |        11 | 10: 169, 9: 90, 8: 53, 7: 23         |
+| v88: Értékelje 0-tól 10-ig a következő munkahelyi szituációkat\! \> Nagyvállalat, minimális előrelépési lehetőség, hierarchikus szervezet, pozíciónak megfelelő átlagos fizetés, fizetetlen túlóra                                                                                                                         |          6 |           0.99 | FALSE   |        11 | 0: 87, 3: 60, 2: 57, 1: 52           |
+| v89: Értékelje 0-tól 10-ig a következőket\! \> Mennyire elégedett az életével mostanában?                                                                                                                                                                                                                                  |          4 |           0.99 | FALSE   |        11 | 8: 124, 7: 75, 9: 60, 6: 45          |
+| v90: Értékelje 0-tól 10-ig a következőket\! \> Mennyire elégedett az anyagi helyzetével?                                                                                                                                                                                                                                   |          4 |           0.99 | FALSE   |        11 | 8: 75, 6: 68, 7: 63, 9: 42           |
+| v91: Értékelje 0-tól 10-ig a következőket\! \> Mennyire elégedett a jelenlegi munkájával / tanulmányaival?                                                                                                                                                                                                                 |          4 |           0.99 | FALSE   |        11 | 8: 83, 7: 71, 9: 69, 10: 59          |
+| v92: Értékelje 0-tól 10-ig a következőket\! \> Mennyire elégedett a munkába (iskolába) járás körülményeivel?                                                                                                                                                                                                               |          3 |           0.99 | FALSE   |        11 | 9: 77, 8: 74, 10: 66, 7: 51          |
+| v93: Értékelje 0-tól 10-ig a következőket\! \> Mennyire elégedett azon idő mennyiségével, amelyet az Ön által kedvelt dolgokkal tölthet?                                                                                                                                                                                   |          3 |           0.99 | FALSE   |        11 | 8: 63, 7: 60, 6: 49, 9: 46           |
+| v94: Értékelje 0-tól 10-ig a következőket\! \> Összességében mennyire érzi tartalmasnak azokat a dolgokat, amiket csinál?                                                                                                                                                                                                  |          3 |           0.99 | FALSE   |        11 | 8: 84, 7: 80, 9: 64, 6: 45           |
+| v95: Értékelje 0-tól 10-ig a következőket\! \> Mennyire néz reményvesztetten vagy bizakodóan a jövőbe? (0: teljes mértékben reményvesztetten, 10: teljes mértékben bizakodóan)                                                                                                                                             |          3 |           0.99 | FALSE   |        11 | 10: 107, 8: 92, 7: 62, 9: 48         |
+| v96: Mostanában milyen gyakran volt boldog?                                                                                                                                                                                                                                                                                |          4 |           0.99 | FALSE   |         5 | töb: 216, idő: 92, min: 67, rit: 36  |
+| v97: Mostanában milyen gyakran volt stresszes?                                                                                                                                                                                                                                                                             |          4 |           0.99 | FALSE   |         5 | töb: 216, idő: 92, min: 67, rit: 36  |
+| v98: Mostanában milyen gyakran érezte magát magányosnak?                                                                                                                                                                                                                                                                   |          4 |           0.99 | FALSE   |         5 | töb: 216, idő: 92, min: 67, rit: 36  |
+| v99: Értékelje 0-tól 10-ig a következőket\! \> Ön szerint mennyire lehet megbízni az emberekben általában?                                                                                                                                                                                                                 |          3 |           0.99 | FALSE   |        11 | 7: 101, 6: 80, 5: 60, 8: 46          |
+| v100: Értékelje 0-tól 10-ig a következőket\! \> Mennyire bízik meg Ön személy szerint a politikai rendszerben?                                                                                                                                                                                                             |          3 |           0.99 | FALSE   |        11 | 0: 101, 2: 65, 3: 49, 1: 48          |
+| v101: Értékelje 0-tól 10-ig a következőket\! \> Mennyire bízik meg Ön személy szerint a jogrendszerben?                                                                                                                                                                                                                    |          3 |           0.99 | FALSE   |        11 | 5: 60, 6: 59, 4: 49, 3: 48           |
+| v102: Értékelje 0-tól 10-ig a következőket\! \> Mennyire bízik meg Ön személy szerint a rendőrségben?                                                                                                                                                                                                                      |          3 |           0.99 | FALSE   |        11 | 5: 62, 6: 51, 7: 51, 3: 46           |
+| v103: Értékelje 0-tól 10-ig a következőket\! \> Mennyire bízik meg Ön személy szerint a honvédségben?                                                                                                                                                                                                                      |          3 |           0.99 | FALSE   |        11 | 5: 62, 7: 54, 8: 53, 4: 48           |
 
 **Variable type: numeric**
 
-| skim\_variable | n\_missing | complete\_rate |     mean |        sd |    p0 |    p25 |    p50 |    p75 |  p100 | hist  |
-| :------------- | ---------: | -------------: | -------: | --------: | ----: | -----: | -----: | -----: | ----: | :---- |
-| v59            |         45 |           0.89 | 326365.6 | 107238.56 | 80000 | 250000 | 300000 | 400000 | 6e+05 | ▁▇▇▃▃ |
-| v60            |         19 |           0.95 | 231213.6 |  63918.26 | 80000 | 180000 | 230000 | 270000 | 4e+05 | ▂▇▇▃▂ |
+| skim\_variable                                                                                           | n\_missing | complete\_rate |     mean |        sd |    p0 |    p25 |    p50 |    p75 |  p100 | hist  |
+| :------------------------------------------------------------------------------------------------------- | ---------: | -------------: | -------: | --------: | ----: | -----: | -----: | -----: | ----: | :---- |
+| v59: Mekkora az a havi nettó bér, amivel elégedett lenne?                                                |         45 |           0.89 | 326365.6 | 107238.56 | 80000 | 250000 | 300000 | 400000 | 6e+05 | ▁▇▇▃▃ |
+| v60: Ön szerint mekkora az a havi nettó bér, amely az Ön szakterületén pályakezdőként reálisan elérhető? |         19 |           0.95 | 231213.6 |  63918.26 | 80000 | 180000 | 230000 | 270000 | 4e+05 | ▂▇▇▃▂ |
 
 ``` r
 ggplot(survey, aes(v1)) +
@@ -252,7 +140,7 @@ ggplot(survey, aes(v1)) +
   labs(x = "", y = "", title = df_names[1, 2])
 ```
 
-<img src="EFOP_uni_student_survey_files/figure-gfm/unnamed-chunk-3-1.png" style="display: block; margin: auto;" />
+<img src="EFOP_uni_student_survey_files/figure-gfm/unnamed-chunk-2-1.png" style="display: block; margin: auto;" />
 
 ``` r
 ggplot(survey, aes(v2)) +
@@ -261,7 +149,7 @@ ggplot(survey, aes(v2)) +
   labs(x = "", y = "", title = df_names[2, 2])
 ```
 
-<img src="EFOP_uni_student_survey_files/figure-gfm/unnamed-chunk-4-1.png" style="display: block; margin: auto;" />
+<img src="EFOP_uni_student_survey_files/figure-gfm/unnamed-chunk-3-1.png" style="display: block; margin: auto;" />
 
 ``` r
 ggplot(survey, aes(v3)) +
@@ -270,7 +158,7 @@ ggplot(survey, aes(v3)) +
   labs(x = "", y = "", title = df_names[3, 2])
 ```
 
-<img src="EFOP_uni_student_survey_files/figure-gfm/unnamed-chunk-5-1.png" style="display: block; margin: auto;" />
+<img src="EFOP_uni_student_survey_files/figure-gfm/unnamed-chunk-4-1.png" style="display: block; margin: auto;" />
 
 ``` r
 ggplot(survey, aes(v4)) +
@@ -279,7 +167,7 @@ ggplot(survey, aes(v4)) +
   labs(x = "", y = "", title = df_names[4, 2])
 ```
 
-<img src="EFOP_uni_student_survey_files/figure-gfm/unnamed-chunk-6-1.png" style="display: block; margin: auto;" />
+<img src="EFOP_uni_student_survey_files/figure-gfm/unnamed-chunk-5-1.png" style="display: block; margin: auto;" />
 
 ``` r
 ggplot(survey, aes(v5)) +
@@ -288,7 +176,7 @@ ggplot(survey, aes(v5)) +
   labs(x = "", y = "", title = "Milyen képzésre jár?")
 ```
 
-<img src="EFOP_uni_student_survey_files/figure-gfm/unnamed-chunk-7-1.png" style="display: block; margin: auto;" />
+<img src="EFOP_uni_student_survey_files/figure-gfm/unnamed-chunk-6-1.png" style="display: block; margin: auto;" />
 
 ``` r
 ggplot(survey, aes(v6)) +
@@ -297,7 +185,7 @@ ggplot(survey, aes(v6)) +
   labs(x = "", y = "", title = "Milyen képzési területre jár?")
 ```
 
-<img src="EFOP_uni_student_survey_files/figure-gfm/unnamed-chunk-8-1.png" style="display: block; margin: auto;" />
+<img src="EFOP_uni_student_survey_files/figure-gfm/unnamed-chunk-7-1.png" style="display: block; margin: auto;" />
 
 ``` r
 ggplot(survey, aes(v7)) +
@@ -306,7 +194,7 @@ ggplot(survey, aes(v7)) +
   labs(x = "", y = "", title = df_names[7, 2])
 ```
 
-<img src="EFOP_uni_student_survey_files/figure-gfm/unnamed-chunk-9-1.png" style="display: block; margin: auto;" />
+<img src="EFOP_uni_student_survey_files/figure-gfm/unnamed-chunk-8-1.png" style="display: block; margin: auto;" />
 
 ``` r
 ggplot(survey, aes(v8)) +
@@ -315,7 +203,7 @@ ggplot(survey, aes(v8)) +
   labs(x = "", y = "", title = df_names[8, 2])
 ```
 
-<img src="EFOP_uni_student_survey_files/figure-gfm/unnamed-chunk-10-1.png" style="display: block; margin: auto;" />
+<img src="EFOP_uni_student_survey_files/figure-gfm/unnamed-chunk-9-1.png" style="display: block; margin: auto;" />
 
 ``` r
 ggplot(survey, aes(v9)) +
@@ -324,7 +212,7 @@ ggplot(survey, aes(v9)) +
   labs(x = "", y = "", title = df_names[9, 2])
 ```
 
-<img src="EFOP_uni_student_survey_files/figure-gfm/unnamed-chunk-11-1.png" style="display: block; margin: auto;" />
+<img src="EFOP_uni_student_survey_files/figure-gfm/unnamed-chunk-10-1.png" style="display: block; margin: auto;" />
 
 ``` r
 ggplot(survey, aes(v10)) +
@@ -333,7 +221,7 @@ ggplot(survey, aes(v10)) +
   labs(x = "", y = "", title = df_names[10, 2])
 ```
 
-<img src="EFOP_uni_student_survey_files/figure-gfm/unnamed-chunk-12-1.png" style="display: block; margin: auto;" />
+<img src="EFOP_uni_student_survey_files/figure-gfm/unnamed-chunk-11-1.png" style="display: block; margin: auto;" />
 
 ``` r
 ggplot(survey, aes(v11)) +
@@ -342,7 +230,7 @@ ggplot(survey, aes(v11)) +
   labs(x = "", y = "", title = df_names[11, 2])
 ```
 
-<img src="EFOP_uni_student_survey_files/figure-gfm/unnamed-chunk-13-1.png" style="display: block; margin: auto;" />
+<img src="EFOP_uni_student_survey_files/figure-gfm/unnamed-chunk-12-1.png" style="display: block; margin: auto;" />
 
 ``` r
 ggplot(survey, aes(v12)) +
@@ -351,7 +239,7 @@ ggplot(survey, aes(v12)) +
   labs(x = "", y = "", title = df_names[12, 2])
 ```
 
-<img src="EFOP_uni_student_survey_files/figure-gfm/unnamed-chunk-14-1.png" style="display: block; margin: auto;" />
+<img src="EFOP_uni_student_survey_files/figure-gfm/unnamed-chunk-13-1.png" style="display: block; margin: auto;" />
 
 ``` r
 survey %>%
@@ -376,7 +264,7 @@ survey %>%
   )
 ```
 
-<img src="EFOP_uni_student_survey_files/figure-gfm/unnamed-chunk-15-1.png" style="display: block; margin: auto;" />
+<img src="EFOP_uni_student_survey_files/figure-gfm/unnamed-chunk-14-1.png" style="display: block; margin: auto;" />
 
 ``` r
 df <- survey %>%
@@ -414,7 +302,7 @@ ggplot() +
   scale_x_discrete(labels = v)
 ```
 
-<img src="EFOP_uni_student_survey_files/figure-gfm/unnamed-chunk-16-1.png" style="display: block; margin: auto;" />
+<img src="EFOP_uni_student_survey_files/figure-gfm/unnamed-chunk-15-1.png" style="display: block; margin: auto;" />
 
 ``` r
 survey_W_outliers %>%
@@ -431,7 +319,7 @@ survey_W_outliers %>%
   )
 ```
 
-<img src="EFOP_uni_student_survey_files/figure-gfm/unnamed-chunk-17-1.png" style="display: block; margin: auto;" />
+<img src="EFOP_uni_student_survey_files/figure-gfm/unnamed-chunk-16-1.png" style="display: block; margin: auto;" />
 
 ``` r
 survey %>%
@@ -456,7 +344,7 @@ survey %>%
   )
 ```
 
-<img src="EFOP_uni_student_survey_files/figure-gfm/unnamed-chunk-18-1.png" style="display: block; margin: auto;" />
+<img src="EFOP_uni_student_survey_files/figure-gfm/unnamed-chunk-17-1.png" style="display: block; margin: auto;" />
 
 ``` r
 survey %>% ggplot(aes(x = v59, y = v60)) +
@@ -477,7 +365,7 @@ survey %>% ggplot(aes(x = v59, y = v60)) +
   )
 ```
 
-<img src="EFOP_uni_student_survey_files/figure-gfm/unnamed-chunk-19-1.png" style="display: block; margin: auto;" />
+<img src="EFOP_uni_student_survey_files/figure-gfm/unnamed-chunk-18-1.png" style="display: block; margin: auto;" />
 
 ``` r
 v <- df_names[-c(59, 60), 2]
@@ -511,7 +399,7 @@ cramer_matrix %>% ggplot() +
   )
 ```
 
-<img src="EFOP_uni_student_survey_files/figure-gfm/unnamed-chunk-20-1.png" style="display: block; margin: auto;" />
+<img src="EFOP_uni_student_survey_files/figure-gfm/unnamed-chunk-19-1.png" style="display: block; margin: auto;" />
 
 ``` r
 cramer_matrix %>%

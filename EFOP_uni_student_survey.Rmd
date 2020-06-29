@@ -17,14 +17,8 @@ load("C:/Users/user/Desktop/OkoR/EFOP-survey/EFOP_uni_student_survey.RData")
 ```
 
 ```{r}
-df_names %>% knitr::kable(caption = "Változókhoz tartozó kérdések")
+survey %>% rename_all(funs(c(str_c(df_names$new_names, ": ", df_names$original_names)))) %>% skimr::skim()
 ```
-
-
-```{r}
-skimr::skim(survey)
-```
-
 
 ```{r fig.height=3}
 ggplot(survey, aes(v1)) +
