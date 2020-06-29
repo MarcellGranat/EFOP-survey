@@ -7,7 +7,7 @@ editor_options:
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE, message = F, warning = F, comment = "", fig.align = "center", fig.width = 9, fig.height = 6)
+knitr::opts_chunk$set(echo = TRUE, message = F, warning = F, comment = "", fig.align = "center", fig.width = 9, fig.height = 6, dev = 'svg')
 library(tidyverse)
 library(pedometrics)
 theme_set(theme_minimal() + theme(
@@ -242,7 +242,7 @@ cramer_matrix <- survey %>%
   )
 
 cramer_matrix %>% ggplot() +
-  geom_tile(aes(x = x, y = y, fill = value), color = "black", linejoin = "mitre", size = .01) +
+  geom_tile(aes(x = x, y = y, fill = value), color = "black", linejoin = "mitre", size = .5) +
   scale_fill_gradient(low = "white", high = "#FF5B6B") +
   scale_x_discrete(expand = c(0, 0), limits = seq(from = 10, by = 10, to = 100)) +
   scale_y_discrete(expand = c(0, 0), limits = seq(from = 10, by = 10, to = 100)) +

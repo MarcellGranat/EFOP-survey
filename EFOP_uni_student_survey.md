@@ -140,7 +140,7 @@ ggplot(survey, aes(v1)) +
   labs(x = "", y = "", title = df_names[1, 2])
 ```
 
-<img src="EFOP_uni_student_survey_files/figure-gfm/unnamed-chunk-2-1.png" style="display: block; margin: auto;" />
+<img src="EFOP_uni_student_survey_files/figure-gfm/unnamed-chunk-2-1.svg" style="display: block; margin: auto;" />
 
 ``` r
 ggplot(survey, aes(v2)) +
@@ -149,7 +149,7 @@ ggplot(survey, aes(v2)) +
   labs(x = "", y = "", title = df_names[2, 2])
 ```
 
-<img src="EFOP_uni_student_survey_files/figure-gfm/unnamed-chunk-3-1.png" style="display: block; margin: auto;" />
+<img src="EFOP_uni_student_survey_files/figure-gfm/unnamed-chunk-3-1.svg" style="display: block; margin: auto;" />
 
 ``` r
 ggplot(survey, aes(v3)) +
@@ -158,7 +158,7 @@ ggplot(survey, aes(v3)) +
   labs(x = "", y = "", title = df_names[3, 2])
 ```
 
-<img src="EFOP_uni_student_survey_files/figure-gfm/unnamed-chunk-4-1.png" style="display: block; margin: auto;" />
+<img src="EFOP_uni_student_survey_files/figure-gfm/unnamed-chunk-4-1.svg" style="display: block; margin: auto;" />
 
 ``` r
 ggplot(survey, aes(v4)) +
@@ -167,7 +167,7 @@ ggplot(survey, aes(v4)) +
   labs(x = "", y = "", title = df_names[4, 2])
 ```
 
-<img src="EFOP_uni_student_survey_files/figure-gfm/unnamed-chunk-5-1.png" style="display: block; margin: auto;" />
+<img src="EFOP_uni_student_survey_files/figure-gfm/unnamed-chunk-5-1.svg" style="display: block; margin: auto;" />
 
 ``` r
 ggplot(survey, aes(v5)) +
@@ -176,7 +176,7 @@ ggplot(survey, aes(v5)) +
   labs(x = "", y = "", title = "Milyen képzésre jár?")
 ```
 
-<img src="EFOP_uni_student_survey_files/figure-gfm/unnamed-chunk-6-1.png" style="display: block; margin: auto;" />
+<img src="EFOP_uni_student_survey_files/figure-gfm/unnamed-chunk-6-1.svg" style="display: block; margin: auto;" />
 
 ``` r
 ggplot(survey, aes(v6)) +
@@ -185,7 +185,7 @@ ggplot(survey, aes(v6)) +
   labs(x = "", y = "", title = "Milyen képzési területre jár?")
 ```
 
-<img src="EFOP_uni_student_survey_files/figure-gfm/unnamed-chunk-7-1.png" style="display: block; margin: auto;" />
+<img src="EFOP_uni_student_survey_files/figure-gfm/unnamed-chunk-7-1.svg" style="display: block; margin: auto;" />
 
 ``` r
 ggplot(survey, aes(v7)) +
@@ -194,7 +194,7 @@ ggplot(survey, aes(v7)) +
   labs(x = "", y = "", title = df_names[7, 2])
 ```
 
-<img src="EFOP_uni_student_survey_files/figure-gfm/unnamed-chunk-8-1.png" style="display: block; margin: auto;" />
+<img src="EFOP_uni_student_survey_files/figure-gfm/unnamed-chunk-8-1.svg" style="display: block; margin: auto;" />
 
 ``` r
 ggplot(survey, aes(v8)) +
@@ -203,7 +203,7 @@ ggplot(survey, aes(v8)) +
   labs(x = "", y = "", title = df_names[8, 2])
 ```
 
-<img src="EFOP_uni_student_survey_files/figure-gfm/unnamed-chunk-9-1.png" style="display: block; margin: auto;" />
+<img src="EFOP_uni_student_survey_files/figure-gfm/unnamed-chunk-9-1.svg" style="display: block; margin: auto;" />
 
 ``` r
 ggplot(survey, aes(v9)) +
@@ -212,7 +212,7 @@ ggplot(survey, aes(v9)) +
   labs(x = "", y = "", title = df_names[9, 2])
 ```
 
-<img src="EFOP_uni_student_survey_files/figure-gfm/unnamed-chunk-10-1.png" style="display: block; margin: auto;" />
+<img src="EFOP_uni_student_survey_files/figure-gfm/unnamed-chunk-10-1.svg" style="display: block; margin: auto;" />
 
 ``` r
 ggplot(survey, aes(v10)) +
@@ -221,7 +221,7 @@ ggplot(survey, aes(v10)) +
   labs(x = "", y = "", title = df_names[10, 2])
 ```
 
-<img src="EFOP_uni_student_survey_files/figure-gfm/unnamed-chunk-11-1.png" style="display: block; margin: auto;" />
+<img src="EFOP_uni_student_survey_files/figure-gfm/unnamed-chunk-11-1.svg" style="display: block; margin: auto;" />
 
 ``` r
 ggplot(survey, aes(v11)) +
@@ -230,7 +230,7 @@ ggplot(survey, aes(v11)) +
   labs(x = "", y = "", title = df_names[11, 2])
 ```
 
-<img src="EFOP_uni_student_survey_files/figure-gfm/unnamed-chunk-12-1.png" style="display: block; margin: auto;" />
+<img src="EFOP_uni_student_survey_files/figure-gfm/unnamed-chunk-12-1.svg" style="display: block; margin: auto;" />
 
 ``` r
 ggplot(survey, aes(v12)) +
@@ -239,7 +239,7 @@ ggplot(survey, aes(v12)) +
   labs(x = "", y = "", title = df_names[12, 2])
 ```
 
-<img src="EFOP_uni_student_survey_files/figure-gfm/unnamed-chunk-13-1.png" style="display: block; margin: auto;" />
+<img src="EFOP_uni_student_survey_files/figure-gfm/unnamed-chunk-13-1.svg" style="display: block; margin: auto;" />
 
 ``` r
 survey %>%
@@ -264,7 +264,7 @@ survey %>%
   )
 ```
 
-<img src="EFOP_uni_student_survey_files/figure-gfm/unnamed-chunk-14-1.png" style="display: block; margin: auto;" />
+<img src="EFOP_uni_student_survey_files/figure-gfm/unnamed-chunk-14-1.svg" style="display: block; margin: auto;" />
 
 ``` r
 df <- survey %>%
@@ -302,7 +302,7 @@ ggplot() +
   scale_x_discrete(labels = v)
 ```
 
-<img src="EFOP_uni_student_survey_files/figure-gfm/unnamed-chunk-15-1.png" style="display: block; margin: auto;" />
+<img src="EFOP_uni_student_survey_files/figure-gfm/unnamed-chunk-15-1.svg" style="display: block; margin: auto;" />
 
 ``` r
 survey_W_outliers %>%
@@ -319,7 +319,7 @@ survey_W_outliers %>%
   )
 ```
 
-<img src="EFOP_uni_student_survey_files/figure-gfm/unnamed-chunk-16-1.png" style="display: block; margin: auto;" />
+<img src="EFOP_uni_student_survey_files/figure-gfm/unnamed-chunk-16-1.svg" style="display: block; margin: auto;" />
 
 ``` r
 survey %>%
@@ -344,7 +344,7 @@ survey %>%
   )
 ```
 
-<img src="EFOP_uni_student_survey_files/figure-gfm/unnamed-chunk-17-1.png" style="display: block; margin: auto;" />
+<img src="EFOP_uni_student_survey_files/figure-gfm/unnamed-chunk-17-1.svg" style="display: block; margin: auto;" />
 
 ``` r
 survey %>% ggplot(aes(x = v59, y = v60)) +
@@ -365,7 +365,7 @@ survey %>% ggplot(aes(x = v59, y = v60)) +
   )
 ```
 
-<img src="EFOP_uni_student_survey_files/figure-gfm/unnamed-chunk-18-1.png" style="display: block; margin: auto;" />
+<img src="EFOP_uni_student_survey_files/figure-gfm/unnamed-chunk-18-1.svg" style="display: block; margin: auto;" />
 
 ``` r
 v <- df_names[-c(59, 60), 2]
@@ -388,7 +388,7 @@ cramer_matrix <- survey %>%
   )
 
 cramer_matrix %>% ggplot() +
-  geom_tile(aes(x = x, y = y, fill = value), color = "black", linejoin = "mitre", size = .01) +
+  geom_tile(aes(x = x, y = y, fill = value), color = "black", linejoin = "mitre", size = .5) +
   scale_fill_gradient(low = "white", high = "#FF5B6B") +
   scale_x_discrete(expand = c(0, 0), limits = seq(from = 10, by = 10, to = 100)) +
   scale_y_discrete(expand = c(0, 0), limits = seq(from = 10, by = 10, to = 100)) +
@@ -399,7 +399,7 @@ cramer_matrix %>% ggplot() +
   )
 ```
 
-<img src="EFOP_uni_student_survey_files/figure-gfm/unnamed-chunk-19-1.png" style="display: block; margin: auto;" />
+<img src="EFOP_uni_student_survey_files/figure-gfm/unnamed-chunk-19-1.svg" style="display: block; margin: auto;" />
 
 ``` r
 cramer_matrix %>%
