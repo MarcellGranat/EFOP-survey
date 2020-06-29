@@ -13,7 +13,7 @@ library(pedometrics)
 theme_set(theme_minimal() + theme(
   legend.title = element_blank()
 ))
-load("C:/Users/user/Desktop/OkoR/EFOP-survey/EFOP_uni_student_survey.RData")
+load("EFOP_uni_student_survey.RData") # enviroment after Data cleaning.Rmd
 ```
 
 ```{r}
