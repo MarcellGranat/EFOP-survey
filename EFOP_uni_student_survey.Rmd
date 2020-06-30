@@ -7,7 +7,7 @@ editor_options:
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE, message = F, warning = F, comment = "", fig.align = "center", fig.width = 9, fig.height = 6, dev = 'svg')
+knitr::opts_chunk$set(echo = TRUE, message = F, warning = F, comment = "", fig.align = "center", fig.width = 9, fig.height = 6, dev = "svg")
 library(tidyverse)
 library(pedometrics)
 theme_set(theme_minimal() + theme(
@@ -17,7 +17,9 @@ load("EFOP_uni_student_survey.RData") # enviroment after Data cleaning.Rmd
 ```
 
 ```{r}
-survey %>% rename_all(funs(c(str_c(df_names$new_names, ": ", df_names$original_names)))) %>% skimr::skim()
+survey %>%
+  rename_all(funs(c(str_c(df_names$new_names, ": ", df_names$original_names)))) %>%
+  skimr::skim()
 ```
 
 ```{r fig.height=3}
@@ -163,6 +165,7 @@ ggplot() +
   scale_x_discrete(labels = v)
 ```
 
+# Jövedelmi kérdésekre adott válaszok ábrái
 
 ```{r}
 survey_W_outliers %>%
@@ -221,6 +224,8 @@ survey %>% ggplot(aes(x = v59, y = v60)) +
   )
 ```
 
+# Kapcsolatvizsgálat
+
 ```{r fig.height=8.5}
 v <- df_names[-c(59, 60), 2]
 cramer_matrix <- survey %>%
@@ -264,6 +269,55 @@ cramer_matrix %>%
   arrange(desc(value)) %>%
   head(20) %>%
   knitr::kable(caption = "Legnagyobb Cramer-mutatóval rendelkező párosítások")
+```
+
+```{r}
+H2_v59 <- vector()
+df <- survey %>%
+  select(-c(v59, v60)) %>%
+  mutate_all(funs(
+    fct_explicit_na(., na_level = "nem válaszolt")
+  ))
+for (i in seq_along(df)) {
+  H2_v59[i] <- aov(formula = y ~ x, data = data.frame(y = survey$v59, x = df[[i]])) %>%
+    broom::tidy() %>%
+    select(sumsq) %>%
+    mutate(sumsq = sumsq / sum(sumsq)) %>%
+    .[1, 1] %>%
+    round(digits = 4)
+}
+names(H2_v59) <- names(df)
+
+data.frame(variable = str_c(df_names$new_names[-c(59, 60)], ": ", df_names$original_names[-c(59, 60)]), H2 = as.numeric(H2_v59)) %>%
+  arrange(desc(H2)) %>%
+  mutate(H2 = scales::percent(H2, accuracy = .01)) %>%
+  head(15) %>%
+  knitr::kable(caption = "Mekkora az a havi nettó bér, amivel elégedett lenne? és a nem numerikus adatok közötti kapcsolat (H^2)")
+```
+
+```{r}
+H2_v60 <- vector()
+df <- survey %>%
+  select(-c(v59, v60)) %>%
+  mutate_all(funs(
+    fct_explicit_na(., na_level = "nem válaszolt")
+  ))
+for (i in seq_along(df)) {
+  H2_v60[i] <- aov(formula = y ~ x, data = data.frame(y = survey$v60, x = df[[i]])) %>%
+    broom::tidy() %>%
+    select(sumsq) %>%
+    mutate(sumsq = sumsq / sum(sumsq)) %>%
+    .[1, 1] %>%
+    round(digits = 4)
+}
+
+names(H2_v60) <- names(df)
+
+data.frame(variable = str_c(df_names$new_names[-c(59, 60)], ": ", df_names$original_names[-c(59, 60)]), H2 = as.numeric(H2_v60)) %>%
+  arrange(desc(H2)) %>%
+  mutate(H2 = scales::percent(H2, accuracy = .01)) %>%
+  head(15) %>%
+  knitr::kable(caption = "Ön szerint mekkora az a havi nettó bér, amely az Ön, amely az ön szakterületés pályakezdőként reálisan elérhető és a nem numerikus adatok közötti kapcsolat (H^2)")
 ```
 
 ```{r}

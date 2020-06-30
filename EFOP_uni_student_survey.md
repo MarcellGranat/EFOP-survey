@@ -3,7 +3,9 @@ Egyetemisták elképzelései a jövő munkahelyéről
 Granát Marcell
 
 ``` r
-survey %>% rename_all(funs(c(str_c(df_names$new_names, ": ", df_names$original_names)))) %>% skimr::skim()
+survey %>%
+  rename_all(funs(c(str_c(df_names$new_names, ": ", df_names$original_names)))) %>%
+  skimr::skim()
 ```
 
 |                                                  |            |
@@ -304,6 +306,8 @@ ggplot() +
 
 <img src="EFOP_uni_student_survey_files/figure-gfm/unnamed-chunk-15-1.svg" style="display: block; margin: auto;" />
 
+# Jövedelmi kérdésekre adott válaszok ábrái
+
 ``` r
 survey_W_outliers %>%
   select(v59, v60) %>%
@@ -366,6 +370,8 @@ survey %>% ggplot(aes(x = v59, y = v60)) +
 ```
 
 <img src="EFOP_uni_student_survey_files/figure-gfm/unnamed-chunk-18-1.svg" style="display: block; margin: auto;" />
+
+# Kapcsolatvizsgálat
 
 ``` r
 v <- df_names[-c(59, 60), 2]
@@ -438,6 +444,98 @@ cramer_matrix %>%
 | Melyiket tartja fontosabbnak? (Multiple career path vagy Up or out)                                      | Melyik tényezők miatt mondana fel egy munkahelyen? (1: emiatt nem mondanék fel - 5: emiatt mindenképpen felmondanék) \> Monoton munka, kevés kihívás                             |  0.71 |
 
 Legnagyobb Cramer-mutatóval rendelkező párosítások
+
+``` r
+H2_v59 <- vector()
+df <- survey %>%
+  select(-c(v59, v60)) %>%
+  mutate_all(funs(
+    fct_explicit_na(., na_level = "nem válaszolt")
+  ))
+for (i in seq_along(df)) {
+  H2_v59[i] <- aov(formula = y ~ x, data = data.frame(y = survey$v59, x = df[[i]])) %>%
+    broom::tidy() %>%
+    select(sumsq) %>%
+    mutate(sumsq = sumsq / sum(sumsq)) %>%
+    .[1, 1] %>%
+    round(digits = 4)
+}
+names(H2_v59) <- names(df)
+
+data.frame(variable = str_c(df_names$new_names[-c(59, 60)], ": ", df_names$original_names[-c(59, 60)]), H2 = as.numeric(H2_v59)) %>%
+  arrange(desc(H2)) %>%
+  mutate(H2 = scales::percent(H2, accuracy = .01)) %>%
+  head(15) %>%
+  knitr::kable(caption = "Mekkora az a havi nettó bér, amivel elégedett lenne? és a nem numerikus adatok közötti kapcsolat (H^2)")
+```
+
+| variable                                                                                                                                                                                                         | H2     |
+| :--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | :----- |
+| v4: Melyik felsőoktatási intézményben tanul?                                                                                                                                                                     | 15.89% |
+| v6: Milyen képzésterületre jár? (Ha többre is, akkor a legfontosabbnak tartottat adja meg\!)                                                                                                                     | 13.99% |
+| v2: Hol van az állandó lakcíme?                                                                                                                                                                                  | 9.52%  |
+| v1: Nem                                                                                                                                                                                                          | 9.26%  |
+| v48: Állítsa fontosság szerint sorrendbe az alábbiakat\! Előre kerüljön az Ön szerint legfontosabb\! \> Fizetés                                                                                                  | 7.65%  |
+| v82: Mennyire bízik abban, hogy eléri a következő 10 évre kitűzött karriercéljait?                                                                                                                               | 7.43%  |
+| v61: 5 év elteltével a kezdőfizetése hányszorosával lenne elégedett?                                                                                                                                             | 7.19%  |
+| v65: Melyik országban?                                                                                                                                                                                           | 6.68%  |
+| v38: Melyik tényezők miatt mondana fel egy munkahelyen? (1: emiatt nem mondanék fel - 5: emiatt mindenképpen felmondanék) \> A béremelés kicsiny mértéke, elmaradása                                             | 6.43%  |
+| v103: Értékelje 0-tól 10-ig a következőket\! \> Mennyire bízik meg Ön személy szerint a honvédségben?                                                                                                            | 5.98%  |
+| v18: Mennyire tartja fontosnak az alábbi szempontokat egy munkahely kapcsán? (1: egyáltalán nem fontos - 5: nagyon fontos) \> Magas bér és juttatások                                                            | 5.88%  |
+| v86: Értékelje 0-tól 10-ig a következő munkahelyi szituációkat\! \> Szakmailag inspiráló munkakörnyezet, szakmai fejlődés folyamatos kényszere, változatos munka folyamatos kihívásokkal, nem kiemelkedő bérezés | 5.83%  |
+| v95: Értékelje 0-tól 10-ig a következőket\! \> Mennyire néz reményvesztetten vagy bizakodóan a jövőbe? (0: teljes mértékben reményvesztetten, 10: teljes mértékben bizakodóan)                                   | 5.03%  |
+| v47: Állítsa fontosság szerint sorrendbe az alábbiakat\! Előre kerüljön az Ön szerint legfontosabb\! \> Munka és magánélet egyensúlya                                                                            | 4.27%  |
+| v94: Értékelje 0-tól 10-ig a következőket\! \> Összességében mennyire érzi tartalmasnak azokat a dolgokat, amiket csinál?                                                                                        | 4.02%  |
+
+Mekkora az a havi nettó bér, amivel elégedett lenne? és a nem numerikus
+adatok közötti kapcsolat (H^2)
+
+``` r
+H2_v60 <- vector()
+df <- survey %>%
+  select(-c(v59, v60)) %>%
+  mutate_all(funs(
+    fct_explicit_na(., na_level = "nem válaszolt")
+  ))
+for (i in seq_along(df)) {
+  H2_v60[i] <- aov(formula = y ~ x, data = data.frame(y = survey$v60, x = df[[i]])) %>%
+    broom::tidy() %>%
+    select(sumsq) %>%
+    mutate(sumsq = sumsq / sum(sumsq)) %>%
+    .[1, 1] %>%
+    round(digits = 4)
+}
+
+names(H2_v60) <- names(df)
+
+data.frame(variable = str_c(df_names$new_names[-c(59, 60)], ": ", df_names$original_names[-c(59, 60)]), H2 = as.numeric(H2_v60)) %>%
+  arrange(desc(H2)) %>%
+  mutate(H2 = scales::percent(H2, accuracy = .01)) %>%
+  head(15) %>%
+  knitr::kable(caption = "Ön szerint mekkora az a havi nettó bér, amely az Ön, amely az ön szakterületés pályakezdőként reálisan elérhető és a nem numerikus adatok közötti kapcsolat (H^2)")
+```
+
+| variable                                                                                                                                                                                                                                | H2     |
+| :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | :----- |
+| v6: Milyen képzésterületre jár? (Ha többre is, akkor a legfontosabbnak tartottat adja meg\!)                                                                                                                                            | 28.59% |
+| v4: Melyik felsőoktatási intézményben tanul?                                                                                                                                                                                            | 26.89% |
+| v82: Mennyire bízik abban, hogy eléri a következő 10 évre kitűzött karriercéljait?                                                                                                                                                      | 11.63% |
+| v2: Hol van az állandó lakcíme?                                                                                                                                                                                                         | 10.70% |
+| v1: Nem                                                                                                                                                                                                                                 | 8.16%  |
+| v83: Értékelje 0-tól 10-ig a következő munkahelyi szituációkat\! \> Kiemelt fizetés, napi 10-12 óra munka, akár hétvégeken is, nemzetközi munkakörnyezet, sok stressz, állandó rendelkezésre állás                                      | 4.83%  |
+| v95: Értékelje 0-tól 10-ig a következőket\! \> Mennyire néz reményvesztetten vagy bizakodóan a jövőbe? (0: teljes mértékben reményvesztetten, 10: teljes mértékben bizakodóan)                                                          | 4.79%  |
+| v15: Milyen típusú cégnél dolgozott? \> multinacionális vállalat                                                                                                                                                                        | 4.68%  |
+| v91: Értékelje 0-tól 10-ig a következőket\! \> Mennyire elégedett a jelenlegi munkájával / tanulmányaival?                                                                                                                              | 4.61%  |
+| v27: Mennyire tartja fontosnak az alábbi szempontokat egy munkahely kapcsán? (1: egyáltalán nem fontos - 5: nagyon fontos) \> A csapatmunka                                                                                             | 4.57%  |
+| v88: Értékelje 0-tól 10-ig a következő munkahelyi szituációkat\! \> Nagyvállalat, minimális előrelépési lehetőség, hierarchikus szervezet, pozíciónak megfelelő átlagos fizetés, fizetetlen túlóra                                      | 4.46%  |
+| v31: Mennyire tartja fontosnak az alábbi szempontokat egy munkahely kapcsán? (1: egyáltalán nem fontos - 5: nagyon fontos) \> Hogy legyenek olyan kezdeményezések, amelyek sikeresen biztosítják a munkavállalók testi és lelki jólétét | 3.60%  |
+| v99: Értékelje 0-tól 10-ig a következőket\! \> Ön szerint mennyire lehet megbízni az emberekben általában?                                                                                                                              | 3.59%  |
+| v52: Mit tart ideálisnak a meetingek gyakoriságára vonatkozóan?                                                                                                                                                                         | 3.28%  |
+| v65: Melyik országban?                                                                                                                                                                                                                  | 3.24%  |
+
+Ön szerint mekkora az a havi nettó bér, amely az Ön, amely az ön
+szakterületés pályakezdőként reálisan elérhető és a nem numerikus
+adatok közötti kapcsolat (H^2)
 
 ``` r
 survey %>%
