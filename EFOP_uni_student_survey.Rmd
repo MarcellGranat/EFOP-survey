@@ -8,12 +8,20 @@ editor_options:
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE, message = F, warning = F, comment = "", fig.align = "center", fig.width = 9, fig.height = 6)
+```
+
+```{r}
 library(tidyverse)
 library(pedometrics)
 theme_set(theme_minimal() + theme(
-  legend.title = element_blank()
+  legend.title = element_blank(),
+  plot.title.position = "plot"
 ))
 load("EFOP_uni_student_survey.RData") # enviroment after Data cleaning.Rmd
+```
+
+```{r eval = knitr::is_html_output() == F, include = F}
+theme_set(ggdark::dark_theme_gray())
 ```
 
 ```{r}
@@ -329,3 +337,17 @@ survey %>%
   arrange(desc(atlag)) %>%
   knitr::kable(caption = "Havi jövedelem, amennyivel elégedett lenne")
 ```
+
+```{r}
+survey %>% select(v59, v60) %>% gather() %>% group_by(key) %>% 
+  summarise(
+    mean = mean(value, na.rm = T),
+    sd = sd(value, na.rm = T),
+    median = median(value, na.rm = T),
+  alpha3 = PerformanceAnalytics::skewness(value, method = "sample"),
+  alpha4 = PerformanceAnalytics::kurtosis(value, method = "sample_excess")
+  ) %>% 
+ mutate_if(is.numeric, round, 2) %>% 
+  knitr::kable(caption = "Elvárt és reális kezdő jövedelmi kérdésre adott válaszok")
+```
+
