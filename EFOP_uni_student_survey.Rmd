@@ -234,7 +234,7 @@ survey %>% ggplot(aes(x = v59, y = v60)) +
 
 # Kapcsolatvizsgálat
 
-```{r fig.height=8.5}
+```{r cache=T}
 v <- df_names[-c(59, 60), 2]
 cramer_matrix <- survey %>%
   select(-c(v59, v60)) %>%
@@ -253,7 +253,10 @@ cramer_matrix <- survey %>%
     y = as.numeric(str_remove(y, "v")),
     y = ifelse(x > y, y, NA),
   )
+```
 
+
+```{r fig.height=8.5}
 cramer_matrix %>% ggplot() +
   geom_tile(aes(x = x, y = y, fill = value), color = "black", linejoin = "mitre", size = .5) +
   scale_fill_gradient(low = "white", high = "#FF5B6B") +
@@ -279,7 +282,7 @@ cramer_matrix %>%
   knitr::kable(caption = "Legnagyobb Cramer-mutatóval rendelkező párosítások")
 ```
 
-```{r}
+```{r cache=T}
 H2_v59 <- vector()
 df <- survey %>%
   select(-c(v59, v60)) %>%
@@ -303,7 +306,7 @@ data.frame(variable = str_c(df_names$new_names[-c(59, 60)], ": ", df_names$origi
   knitr::kable(caption = "Mekkora az a havi nettó bér, amivel elégedett lenne? és a nem numerikus adatok közötti kapcsolat (H^2)")
 ```
 
-```{r}
+```{r cache=T}
 H2_v60 <- vector()
 df <- survey %>%
   select(-c(v59, v60)) %>%
@@ -344,8 +347,8 @@ survey %>% select(v59, v60) %>% gather() %>% group_by(key) %>%
     mean = mean(value, na.rm = T),
     sd = sd(value, na.rm = T),
     median = median(value, na.rm = T),
-  alpha3 = PerformanceAnalytics::skewness(value, method = "sample"),
-  alpha4 = PerformanceAnalytics::kurtosis(value, method = "sample_excess")
+    alpha3 = PerformanceAnalytics::skewness(value, method = "sample"),
+    alpha4 = PerformanceAnalytics::kurtosis(value, method = "sample_excess")
   ) %>% 
  mutate_if(is.numeric, round, 2) %>% 
   knitr::kable(caption = "Elvárt és reális kezdő jövedelmi kérdésre adott válaszok")

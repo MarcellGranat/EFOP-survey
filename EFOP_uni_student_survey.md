@@ -402,7 +402,9 @@ cramer_matrix <- survey %>%
     y = as.numeric(str_remove(y, "v")),
     y = ifelse(x > y, y, NA),
   )
+```
 
+``` r
 cramer_matrix %>% ggplot() +
   geom_tile(aes(x = x, y = y, fill = value), color = "black", linejoin = "mitre", size = .5) +
   scale_fill_gradient(low = "white", high = "#FF5B6B") +
@@ -415,7 +417,7 @@ cramer_matrix %>% ggplot() +
   )
 ```
 
-<img src="EFOP_uni_student_survey_files/figure-gfm/unnamed-chunk-21-1.png" style="display: block; margin: auto;" />
+<img src="EFOP_uni_student_survey_files/figure-gfm/unnamed-chunk-22-1.png" style="display: block; margin: auto;" />
 
 ``` r
 cramer_matrix %>%
@@ -585,8 +587,8 @@ survey %>% select(v59, v60) %>% gather() %>% group_by(key) %>%
     mean = mean(value, na.rm = T),
     sd = sd(value, na.rm = T),
     median = median(value, na.rm = T),
-  alpha3 = PerformanceAnalytics::skewness(value, method = "sample"),
-  alpha4 = PerformanceAnalytics::kurtosis(value, method = "sample_excess")
+    alpha3 = PerformanceAnalytics::skewness(value, method = "sample"),
+    alpha4 = PerformanceAnalytics::kurtosis(value, method = "sample_excess")
   ) %>% 
  mutate_if(is.numeric, round, 2) %>% 
   knitr::kable(caption = "Elvárt és reális kezdő jövedelmi kérdésre adott válaszok")
