@@ -90,7 +90,7 @@ df_names <- tibble::tribble(
               "work_abroad",                                                                                                                                                                                                                                                 "A végzettség megszerzését követően tervez-e külföldi munkavállalást?",                                                                                                                                                                                                                               "Do you plan to work abroad after graduation?",
             "work_abroad_c",                                                                                                                                                                                                                                                                                                    "Melyik országban?",                                                                                                                                                                                                                                                          "In which country?",
             "work_abroad_p",                                                                                                                                                                                                                                                                   "A szakterületén tervezi a külföldi munkavállalást?",                                                                                                                                                                                                                  "Do you plan on working abroad in your professional field?",
-             "country_stay",                                                                                                                                                                                                                                                                                "Ha Magyarországon maradna, akkor hol?",                                                                                                                                                                                                                                  "If you stayed in your own country, where?",
+             "country_stay",                                                                                                                                                                                                                                                                                "Ha Magyarországon maradna, akkor hol?",                                                                                                                                                                                                                                  "If you stayed in Hungary, where?",
           "stay_enviroment",                                                                                                                                                                                                       "Az előző kérdésre adott válasz tekintetében mely tényezőket tartja relevánsnak? > Szellemi és kulturális közeg",                                                                                                                                                     "Which factors do you consider relevant to the answer to the previous question? > intellectual and cultural environment",
             "stay_material",                                                                                                                                                                                                        "Az előző kérdésre adott válasz tekintetében mely tényezőket tartja relevánsnak? > Magasabb anyagi megbecsülés",                                                                                                                                                              "Which factors do you consider relevant to the answer to the previous question? > higher material appreciation",
              "stay_housing",                                                                                                                                                                                                  "Az előző kérdésre adott válasz tekintetében mely tényezőket tartja relevánsnak? > Lakhatási és megélhetési kiadások",                                                                                                                                                               "Which factors do you consider relevant to the answer to the previous question? > housing and living expenses",
@@ -102,7 +102,7 @@ df_names <- tibble::tribble(
           "sabbatical_know",                                                                                                                                                                                                                                                                             "Tudja-e, mit fed a sabbatical kifejezés?",                                                                                                                                                                                                                                "Do you know what the term sabbatical means?",
                        "ho",                                                                                                                                                                                                                                                                                         "Van-e igénye home office-ra?",                                                                                                                                                                                                                                              "Would you prefer home office?",
                 "work_kind",                                                                                                                                                                                                                                                                      "Milyen munkavégzés felel meg Önnek a legjobban?",                                                                                                                                                                                                                                         "What kind of work is best for you?",
-                "chage_job",                                                                                                                                                                                                                                                                                    "Milyen gyakran váltana munkakört?",                                                                                                                                                                                                                                           "How often would you change jobs?",
+                "change_job",                                                                                                                                                                                                                                                                                    "Milyen gyakran váltana munkakört?",                                                                                                                                                                                                                                           "How often would you change jobs?",
               "flexibility",                                                                                                                                                                                                                                                "Mennyire rugalmas a munkavégzés helyét illetően? Hol vállalna munkát?",                                                                                                                                                                                                       "How flexible are you about your place of work? Where would you work?",
                      "baby",                                                                                                                                                                                                                                "Segítene-e a gyermekvállalásban, ha tudná, hogy a munkahely rugalmasan kezeli azt (pl",                                                                                                                                                     "Would it be helpful if the workplace was flexible (eg providing temporary part-time work) when you were having a baby?",
           "goal_confidence",                                                                                                                                                                                                                                        "Mennyire bízik abban, hogy eléri a következő 10 évre kitűzött karriercéljait?",                                                                                                                                                                                                "How confident are you in achieving your career goals for the next 10 years?",
@@ -131,7 +131,7 @@ df_names <- tibble::tribble(
 ```
 
 
-# General cleaning
+## General cleaning
 
 ```{r}
 survey <-
@@ -142,11 +142,16 @@ survey <-
   setNames(df_names$variable)
 ```
 
+## Hungarian
+
+### Factors
+
 ```{r}
 survey_W_outliers_hun <- # before cleaning from outliers at v59 & v60
   survey %>%
   set_names(str_c("v", seq_along(survey))) %>% 
   mutate_each(funs(as.factor)) %>%
+  mutate_at(c(18:44, 47:50, 63, 82:95, 99:103), factor, ordered = T) %>% 
   mutate(
     v59 = as.integer(survey$comf_salary),
     v60 = as.integer(survey$real_salary),
@@ -167,7 +172,7 @@ survey_W_outliers_hun <- # before cleaning from outliers at v59 & v60
   )
 ```
 
-## Remove outliers
+### Remove outliers
 
 ```{r}
 outlier_remove <- function(v) {
@@ -191,6 +196,10 @@ survey_hun <- survey_W_outliers_hun %>% mutate(
 survey_W_outliers_hun <- survey_W_outliers_hun %>% set_names(df_names$variable)
 ```
 
+## English
+
+### Translate factors
+
 ```{r}
 library(plyr) # ---> revalue() f
 survey_W_outliers <- survey_W_outliers_hun %>% mutate(
@@ -198,21 +207,233 @@ survey_W_outliers <- survey_W_outliers_hun %>% mutate(
     'Férfi' = 'Male',
     'Nő' = 'Female'
   )),
-  
+  parents_edu = revalue(parents_edu, c(
+    "legfeljebb általános iskola" = "at most elementary school",
+    "szakiskola vagy szakmunkásképző" = "vocational (specialized) school",
+    "középiskola érettségivel" = "high school",
+    "főiskola" = "BSc",
+    "egyetem" = "MSc"
+  )),
+    uni = revalue(uni, c(
+"Állatorvostudományi Egyetem (ATE)" = "University of Veterinary Medicine Budapest",
+"Budapesti Corvinus Egyetem (BCE)" = "Corvinus University of Budapest",
+"Budapesti Gazdasági Egyetem (BGE)" = "Budapest Business School",
+"Budapesti Műszaki és Gazdaságtudományi Egyetem (BME)" = "Budapest University of Technology and Economics",
+"Debreceni Egyetem (DE)" = "University of Debrecen",
+"Eötvös Loránd Tudományegyetem (ELTE)" = "Eötvös Loránd University",
+"Közép-európai Egyetem (CEU)" = "Central European University",
+"Miskolci Egyetem (ME)" = "Miskolci Egyetem (ME)", # no answer already
+"Nemzeti Közszolgálati Egyetem (NKE)" = "National University of Public Service",
+"Óbudai Egyetem (OE)" = "Óbudai University",
+"Pannon Egyetem (PE)" = "University of Pannonia",
+"Pázmány Péter Katolikus Egyetem (PPKE)" = "Pázmány Péter Catholic University",
+"Pécsi Tudományegyetem (PPKE)" = "University of Pécs",
+"Semmelweis Egyetem (SE)" = "Semmelweis University",
+"Szent István Egyetem (SZIE)" = "Szent István University",
+"Szegedi Tudományegyetem (SZTE)" = "University of Szeged",
+"egyéb külföldi intézmény" = "other foreign institution", # no answer already
+"egyéb magyarországi intézmény" = "other Hungarian institution"
+), warn_missing = F),
+level_edu = revalue(level_edu, c(
+"alapképzés"	= 'BSc',
+"mesterképzés"	= 'MSc',
+"osztatlan képzés"	= 'undived (BSc and MSc together)',
+"PHD képzés"	= 'PhD',
+"egyéb" = 'other'	
+)),
+area_edu = revalue(area_edu, c(
+"agrár" = "agriculture",
+"államtudományi" = "public science",
+"bölcsészettudományi" = "humanities",
+"gazdaságtudományi" = "economics",
+"informatika" = "IT",
+"jogi" = "law",
+"műszaki" = "technology",
+"művészeti / művészetközvetítési" = "artistic",
+"orvos- és egészségtudományi" = "medical and health sciences",
+"pedagógusképzési" = "teacher training",
+"sporttudományi" = "sport sciences",
+"társadalomtudományi" = "social sciences",
+"természettudományi" = "natural sciences",
+"egyéb" = "other"
+  )),
+  continue_edu = revalue(continue_edu, c(
+  "igen, Magyarországon" = "yes, in Hungary",
+"igen, külföldön" = "yes, in another country",
+"nem" = "no"
+    )),
   english_knowledge = revalue(english_knowledge, c(
     "alap" = "basic",
     "közép" = "medium",
     "felső" = "upper",
     "nincs" = "none"
-  ))
+  )),
+  german_knowledge = revalue(german_knowledge, c(
+    "alap" = "basic",
+    "közép" = "medium",
+    "felső" = "upper",
+    "nincs" = "none"
+  )),
+employed = revalue(employed, c(
+ "nem" = "no",
+ "igen" = "yes"
+)),
+pro_employed = revalue(pro_employed, c(
+ "nem" = "no",
+ "igen" = "yes"
+)),
+time_employed = revalue(time_employed, c(
+"3 hónapnál rövidebb ideig" = "less than three months",
+"3 hónap és fél év között" = "more than three months",
+"fél évnél hosszabb ideig" = "more than half a year"
+  )),
+company_type_SME = revalue(company_type_SME, c("KKV" = "SME")),
+company_type_local = revalue(company_type_local, c("magyar nagyvállalat" = "local corporation")),
+company_type_multi = revalue(company_type_multi, c("multinacionális vállalat" = "multinational corporation")),
+company_type_public = revalue(company_type_public, c("közszféra" = "public sector")),
+company_type_other = revalue(company_type_other, c("egyéb" = "other")),
+value_added = revalue(value_added, c(
+  "Hozzáadott érték" = "Value added",
+  "Munkaidő kitöltése" = "Filling in working time"
+)),
+up_or_out = revalue(up_or_out, c(
+  "Up or out (elsősorban a vállalati ranglétrán való elhelyezkedés jelenti a sikert)" = "Up or out",
+  "Multiple career path (a sikeres szakmai karrier nem függ a vállalati hierarchiában betöltött pozíciótól)" = "Multiple career path"
+)),
+ppl_room = revalue(ppl_room, c(
+"1 fő" = "1 person",
+"2-3 fő" = "2-3 people",
+"4-5 fő" = "4-5 people",
+"6-8 fő" = "6-8 people",
+"még többen" = "more people"
+  )),
+meeting = revalue(meeting, c(
+"napi" = "Daily",
+"hetente többször" = "More times a week",
+"hetente egyszer" = "Once a week",
+"havonta kétszer" = "Twice a month",
+"havonta" = "Monthly",
+"még ritkábban" = "Less often"
+)),
+online_contact = revalue(online_contact, c(
+ "nem" = "no",
+ "igen" = "yes"
+)),
+atypical_platform = revalue(atypical_platform, c("platform alapú" = "platform based")),
+atypical_telework = revalue(atypical_telework, c("távmunka" = "telework")),
+atypical_part_time = revalue(atypical_part_time, c("részmunka" = "part-time job")),
+atypical_startup = revalue(atypical_startup, c("saját vállalkozás indítása (startup)" = "startup")),
+atypical_non_fixed = revalue(atypical_non_fixed, c("nem helyhez kötött munkavégzés" = "non-fixed employment")),
+fivey_salary = revalue(fivey_salary, c(
+"1 - 1,5" = "1-1.5",
+"1,5 - 2" = "1.5-2",
+"2 - 2,5" = "2-2.5",
+"nem lényeges szempont" = "This is not a relevant aspect"  
+)),
+fivey_position = revalue(fivey_position, c(
+"felsővezető" = "top management",
+"középvezető" = "middle management",
+"beosztott" = "subordinate",
+"független szakértő / saját cégen belüli munkavégzés" = "independent expert/in-house work"
+  )),
+work_abroad = revalue(work_abroad, c(
+  "igen" = "yes",
+  "nem" = "no",
+  "még nem tudom" = "I don’t know yet"
+)),
+work_abroad_c = revalue(work_abroad_c, c(
+"Ausztria" =  "Austria",
+"Dánia" = "Denmark", 
+"Egyesült Királyság" =  "United Kingdom",
+"Franciaország" = "France" ,
+"Hollandia" = "Netherlands" ,
+"Németország" =  "Germany",
+"Olaszország" = "Italy" ,
+"Skandináv államok" =  "Scandinavian countries",
+"Spanyolország" = "Spain" ,
+"Svájc" = "Switzerland" ,
+"Amerikai Egyesült Államok" =  "United States",
+"Kanada" = "Canada", 
+"egyéb európai ország" =  "other European country",
+"egyéb nem európai ország" =  "other non-European country"
+  )),
+work_abroad_p = revalue(work_abroad_p, c(
+  "igen" = "yes",
+  "nem" = "no"
+)),
+country_stay = revalue(country_stay, c(
+"állandó lakóhelyének környezetében" = "In the area of your permanent address",
+"annak környezetében, ahol jelenleg életvitelszerűen él" = "In the surrounding region",
+"ezektől eltérő, más megyében / városban" = "In other counties/cities",
+"a munkahely holléte számomra nem lényeges szempont" = "The whereabouts of workplace is irrelevant to me"
+  )),
+stay_enviroment = revalue(stay_enviroment, c("Szellemi és kulturális közeg" = "intellectual and cultural environment")),
+stay_material = revalue(stay_material, c("Magasabb anyagi megbecsülés" = "higher material appreciation")),
+stay_housing = revalue(stay_housing, c("Lakhatási és megélhetési kiadások" = "housing and living expenses")),
+stay_family = revalue(stay_family, c("Családi kapcsolatok" = "family relationships")),
+stay_friends = revalue(stay_friends, c("Baráti kapcsolatok" = "friends relationships")),
+stay_development = revalue(stay_development, c("Szakmai kihívás és fejlődés lehetősége" = "professional challanges and opportunitiy for development")),
+scholarship = revalue(scholarship, c(
+"állami ösztöndíjas" = "full scholarship",
+"részösztöndíjas" = "partial scholarship",
+"önköltséges" = "self-financing"
+)),
+mobility_restrictions = revalue(mobility_restrictions, c(
+  "igen" = "yes",
+  "nem" = "no"
+)),
+sabbatical_know = revalue(sabbatical_know, c(
+  "igen" = "yes",
+  "nem" = "no"
+)),
+ho = revalue(ho, c(
+"igen, hetente több napra" = "yes, several days a week",
+"igen, heti egy napra" = "yes, one day a week",
+"igen, heti pár órára" = "yes, several hours a week",
+"nem" = "no"
+)),
+work_kind = revalue(work_kind, c(
+"fix idejű" = "fixed time",
+"bizonyos keretek között rugalmas" = "flexible within certain frames",
+"teljesen rugalmas" = "completely flexible"
+)),
+change_job = revalue(change_job, c(
+"1-2 évente" = "every 1 to 2 years",
+"3-8 évente" = "every 3 to 8 years",
+"8-15 évente" = "every 8 to 15 years",
+"15-30 évente" = "every 15 to 30 years",
+"soha" = "never"
+)),
+flexibility = revalue(flexibility, c(
+"egyáltalán nem" = "Not at all",
+"a környező települések még szóba jöhetnek" = "Surrounding settlements may still considered",
+"távolabbi települések is szóba jöhetnek, de csak Magyarországon" = "Further away settlements may be considered, but only in my own country",
+"külföldön is vállalnék munkát" = "I would also work abroad"
+)),
+baby = revalue(baby, c(
+  "igen" = "yes",
+  "nem" = "no"
+)),
+  )
+```
+
+### Remove outliers
+
+```{r}
+survey <- survey_W_outliers %>% mutate(
+  comf_salary = ifelse(comf_salary < 10000, comf_salary * 1000, comf_salary), # manage commit execution error by participant ---> probably thougth to '000 Ft or wrote '.' instead ','
+  real_salary = ifelse(real_salary < 10000, real_salary * 1000, real_salary),
+  comf_salary = outlier_remove(comf_salary),
+  real_salary = outlier_remove(real_salary)
 )
 ```
 
+
 ```{r}
-skimr::skim(survey_W_outliers_hun)
+skimr::skim(survey_hun)
 ```
 
 ```{r}
-skimr::skim(survey_W_outliers)
+skimr::skim(survey)
 ```
 
