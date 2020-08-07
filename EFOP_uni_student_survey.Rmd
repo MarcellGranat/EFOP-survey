@@ -7,7 +7,7 @@ output: github_document
 ## setup
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE, message = F, warning = F, comment = "", fig.align = "center", fig.width = 9, fig.height = 6, cache = T, fig.path='plot/', tidy = T, cache.path="cache/")
+knitr::opts_chunk$set(echo = TRUE, message = F, warning = F, comment = "", fig.align = "center", fig.width = 9, fig.height = 6, fig.path = "plot/", tidy = T, cache.path = "cache/", cache = T)
 ```
 
 ```{r}
@@ -51,7 +51,9 @@ theme_set(ggdark::dark_theme_gray() + theme(
 ### Skim
 
 ```{r}
-skimr::skim(setNames(survey, c(str_c(df_names$variable, ": ", df_names$english))))
+survey %>%
+  set_names(str_c(df_names$variable, ": ", df_names$english)) %>%
+  skimr::skim()
 ```
 
 ### Plots
@@ -128,7 +130,11 @@ ggplot(mapping = aes(german_knowledge)) +
 ```
 
 ```{r fig.height= 12}
-survey %>% select(employed:time_employed) %>% gather() %>% merge(df_names, by.x = "key", by.y = "variable") %>% filter(!is.na(value)) %>% 
+survey %>%
+  select(employed:time_employed) %>%
+  gather() %>%
+  merge(df_names, by.x = "key", by.y = "variable") %>%
+  filter(!is.na(value)) %>%
   ggplot(mapping = aes(value)) +
   geom_bar(color = "black", width = .8) +
   coord_flip() +
@@ -140,8 +146,10 @@ survey %>% select(employed:time_employed) %>% gather() %>% merge(df_names, by.x 
 ```{r}
 survey %>%
   select(company_type_SME:company_type_other) %>%
-  gather(na.rm = T) %>% group_by(value) %>% 
-  tally() %>% transmute(
+  gather(na.rm = T) %>%
+  group_by(value) %>%
+  tally() %>%
+  transmute(
     n = n / sum(n),
     value = fct_reorder(value, n)
   ) %>%
@@ -222,7 +230,7 @@ survey %>%
     data = data.frame(key = c("comf_salary", "real_salary"), value = c(mean(survey$comf_salary, na.rm = T), mean(survey$real_salary, na.rm = T))),
     aes(xintercept = value, color = "Átlag"), linetype = "dashed", size = 1.1
   ) +
-  scale_x_continuous(breaks = seq(from = 100000, to = 600000, by = 100000), labels = seq(from = 100, to = 600, by = 100), expand = c(0,0), limits = c(100000, 600000)) +
+  scale_x_continuous(breaks = seq(from = 100000, to = 600000, by = 100000), labels = seq(from = 100, to = 600, by = 100), expand = c(0, 0), limits = c(100000, 600000)) +
   scale_color_manual(values = c("Átlag" = "red")) +
   theme(
     legend.position = "bottom"
@@ -235,8 +243,8 @@ survey %>% ggplot(aes(x = comf_salary, y = real_salary)) +
   geom_vline(xintercept = mean(survey$comf_salary, na.rm = T), color = "black", linetype = "dashed") +
   geom_point(alpha = .5) +
   geom_smooth(method = "lm", color = "red") +
-  scale_x_continuous(breaks = seq(from = 100000, to = 600000, by = 100000), labels = seq(from = 100, to = 600, by = 100), expand = c(0,0), limits = c(100000, 600000)) +
-  scale_y_continuous(breaks = seq(from = 100000, to = 600000, by = 100000), labels = seq(from = 100, to = 600, by = 100), expand = c(0,0), limits = c(100000, 600000)) +
+  scale_x_continuous(breaks = seq(from = 100000, to = 600000, by = 100000), labels = seq(from = 100, to = 600, by = 100), expand = c(0, 0), limits = c(100000, 600000)) +
+  scale_y_continuous(breaks = seq(from = 100000, to = 600000, by = 100000), labels = seq(from = 100, to = 600, by = 100), expand = c(0, 0), limits = c(100000, 600000)) +
   labs(
     x = "you would be comfortable with?", y = "is realistically available\nin your field as a career beginner?", title = "What is your monthly net salary that ...",
     caption = "Values are in Hungarian Forint, '000",
@@ -250,7 +258,7 @@ survey %>% ggplot(aes(x = comf_salary, y = real_salary)) +
 
 ## Kapcsolatvizsgálat
 
-```{r cramer_matrix, cache = T}
+```{r cramer_matrix}
 cramer_matrix <- survey %>%
   select(-c(comf_salary, real_salary)) %>%
   mutate_all(funs(
@@ -260,32 +268,34 @@ cramer_matrix <- survey %>%
   cramer() %>%
   data.frame()
 
-cramer_matrix[upper.tri(cramer_matrix,diag = T)] <- ""
+cramer_matrix[upper.tri(cramer_matrix, diag = T)] <- ""
 
-cramer_matrix <- cramer_matrix %>% data.frame() %>% 
-  rownames_to_column() %>% pivot_longer(-1) %>% transmute(
+cramer_matrix <- cramer_matrix %>%
+  data.frame() %>%
+  rownames_to_column() %>%
+  pivot_longer(-1) %>%
+  transmute(
     x = factor(rowname, levels = names(survey), ordered = T),
     y = factor(name, levels = names(survey), ordered = T),
     value = value
-  ) %>% filter(value != "") %>% mutate(
+  ) %>%
+  filter(value != "") %>%
+  mutate(
     value = as.numeric(value)
   )
 ```
 
-```{r}
-cramer_matrix %>% mutate(
-  x = as.numeric(x),
-  y = as.numeric(y),
-  y = as.numeric(y),
-)
-```
-
-```{r}
-ggplot(cramer_matrix) + 
+```{r, fig.height=8.5}
+ggplot(cramer_matrix) +
   geom_tile(aes(x = x, y = y, fill = value), color = "black", linejoin = "mitre", size = .5) +
-scale_fill_gradient(low = "white", high = "#FF5B6B") +
+  scale_fill_gradient(low = "white", high = "#FF5B6B") +
   labs(
     title = "Cramer-matrix", x = "", y = ""
+  ) +
+  theme(
+    axis.text = element_text(size = 6),
+    axis.text.x = element_text(angle = 90, hjust = 0.95, vjust = 0.2),
+    legend.title = element_blank()
   )
 ```
 
@@ -296,7 +306,7 @@ cramer_matrix %>%
     value = round(value, digits = 2)
   ) %>%
   head(20) %>%
-  knitr::kable(caption = "Pairings with the highest Cramer", align = c("c","c","c"))
+  knitr::kable(caption = "Pairings with the highest Cramer", align = c("c", "c", "c"))
 ```
 
 ```{r}
@@ -320,8 +330,8 @@ names(H2_comf_salary) <- names(df)
 data.frame(variable = df_names$variable[-c(59, 60)], H2 = as.numeric(H2_comf_salary)) %>%
   arrange(desc(H2)) %>%
   mutate(H2 = scales::percent(H2, accuracy = .01)) %>%
-  head(15) %>% 
-knitr::kable(caption = 'Relation between "What is your monthly net salary that you would be comfortable with?" and nominal variables (H^2)')
+  head(15) %>%
+  knitr::kable(caption = 'Relation between "What is your monthly net salary that you would be comfortable with?" and nominal variables (H^2)')
 ```
 
 ```{r}
@@ -348,5 +358,3 @@ data.frame(variable = df_names$variable[-c(59, 60)], H2 = as.numeric(H2_real_sal
   head(15) %>%
   knitr::kable(caption = 'Relation between "What do you think is the net monthly salary that is realistically available in your field as a career beginner?" and nominal variables (H^2)')
 ```
-
-

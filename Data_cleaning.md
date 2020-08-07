@@ -9,7 +9,7 @@ library(tidyverse)
 ```
 
 ``` r
-survey <- readxl::read_excel("Egyetemistak elkepzelesei a jovo munkahelyerol-adat-2020-04-16.xlsx")
+survey_untidied <- readxl::read_excel("Egyetemistak elkepzelesei a jovo munkahelyerol-adat-2020-04-16.xlsx")
 ```
 
 ``` r
@@ -77,7 +77,7 @@ df_names %>% set_names(c("variable", "Question in Hungarian", "Question in Engli
 | atypical\_startup         |                                                                                                        Az alábbi atipikus foglalkozási formák közül melyik érdekelné? \> saját vállalkozás indítása (startup)                                                                                                         |                                                                                           Which of the following atypical employment forms would you be interested in? \> startup                                                                                           |
 | atypical\_non\_fixed      |                                                                                                           Az alábbi atipikus foglalkozási formák közül melyik érdekelné? \> nem helyhez kötött munkavégzés                                                                                                            |                                                                                    Which of the following atypical employment forms would you be interested in? \> non-fixed employment                                                                                     |
 | comf\_salary              |                                                                                                                                 Mekkora az a havi nettó bér, amivel elégedett lenne?                                                                                                                                  |                                                                                          What is your monthly net salary that you would be comfortable with? (In Hungarian Forint)                                                                                          |
-| real\_salary              |                                                                                                          Ön szerint mekkora az a havi nettó bér, amely az Ön szakterületén pályakezdőként reálisan elérhető?                                                                                                          |                                                                    What do you think is the net monthly salary that is realistically available in your field as a career beginner? (In Hungarian Forin)                                                                     |
+| real\_salary              |                                                                                                          Ön szerint mekkora az a havi nettó bér, amely az Ön szakterületén pályakezdőként reálisan elérhető?                                                                                                          |                                                                    What do you think is the net monthly salary that is realistically available in your field as a career beginner? (In Hungarian Forint)                                                                    |
 | fivey\_salary             |                                                                                                                            5 év elteltével a kezdőfizetése hányszorosával lenne elégedett?                                                                                                                            |                                                                                                After 5 years, how many times of your starting salary would you be satisfied?                                                                                                |
 | fivey\_position           |                                                                                                                                   5 év elteltével milyen beosztást szeretne elérni?                                                                                                                                   |                                                                                                            After 5 years, what position do you want to achieve?                                                                                                             |
 | fiveyy\_development       |                                                                                                   Mennyire fontos önnek, hogy 5 év alatt jelentős szakmai fejlődést produkáljon (anyagiakon és előremenetelen túl)?                                                                                                   |                                                                     How important is it to you to produce significant professional development (beyond material and hierarchical position) in 5 years?                                                                      |
@@ -127,8 +127,8 @@ variable names, the original Q in Hungarian & its translation to English
 ## General cleaning
 
 ``` r
-survey <-
-  survey[-(duplicated(survey[2]) == T) * (is.na(survey[2]) == F) * seq(nrow(survey)), ] %>% # remove the answer from participants, who answered for 2nd time
+survey_untidied <-
+  survey_untidied[-(duplicated(survey_untidied[2]) == T) * (is.na(survey_untidied[2]) == F) * seq(nrow(survey_untidied)), ] %>% # remove the answer from participants, who answered for 2nd time
   select_if(~ sum(!is.na(.)) > 0) %>% # remove empty columns
   .[, ] %>%
   select(-c(1, 2)) %>%  # remove user rank & e-mail ---> not relevant 
@@ -141,13 +141,13 @@ survey <-
 
 ``` r
 survey_W_outliers_hun <- # before cleaning from outliers at v59 & v60
-  survey %>%
-  set_names(str_c("v", seq_along(survey))) %>% 
+  survey_untidied %>%
+  set_names(str_c("v", seq_along(survey_untidied))) %>% 
   mutate_each(funs(as.factor)) %>%
   mutate_at(c(18:44, 47:50, 63, 82:95, 99:103), factor, ordered = T) %>% 
   mutate(
-    v59 = as.integer(survey$comf_salary),
-    v60 = as.integer(survey$real_salary),
+    v59 = as.integer(survey_untidied$comf_salary),
+    v60 = as.integer(survey_untidied$real_salary),
     # factors which has to be sorted
     v3 = factor(v3, levels = c("legfeljebb általános iskola", "szakiskola vagy szakmunkásképző", "középiskola érettségivel", "főiskola", "egyetem"), ordered = T),
     v5 = factor(v5, levels = c("alapképzés", "mesterképzés", "osztatlan képzés", "PHD képzés", "egyéb")),
@@ -418,3 +418,197 @@ survey <- survey_W_outliers %>% mutate(
   real_salary = survey_hun$real_salary
 )
 ```
+
+``` r
+data.frame(
+  a = survey_W_outliers_hun$comf_salary,
+  b = survey_hun$comf_salary,
+  c = survey_W_outliers$comf_salary,
+  d = survey$comf_salary
+) %>% arrange(a) %>% head(50)
+```
+
+``` 
+        a      b      c      d
+1     150 150000    150 150000
+2     160 160000    160 160000
+3     200 200000    200 200000
+4     200 200000    200 200000
+5     230 230000    230 230000
+6     250 250000    250 250000
+7     250 250000    250 250000
+8     250 250000    250 250000
+9     250 250000    250 250000
+10    250 250000    250 250000
+11    300 300000    300 300000
+12    300 300000    300 300000
+13    300 300000    300 300000
+14    300 300000    300 300000
+15    300 300000    300 300000
+16    300 300000    300 300000
+17    300 300000    300 300000
+18    300 300000    300 300000
+19    300 300000    300 300000
+20    350 350000    350 350000
+21    350 350000    350 350000
+22    350 350000    350 350000
+23    350 350000    350 350000
+24    380 380000    380 380000
+25    400 400000    400 400000
+26    400 400000    400 400000
+27    400 400000    400 400000
+28    400 400000    400 400000
+29    400 400000    400 400000
+30    400 400000    400 400000
+31    450 450000    450 450000
+32    460 460000    460 460000
+33    500 500000    500 500000
+34    700     NA    700     NA
+35    700     NA    700     NA
+36   2000     NA   2000     NA
+37  80000  80000  80000  80000
+38 100000 100000 100000 100000
+39 120000 120000 120000 120000
+40 140000 140000 140000 140000
+41 150000 150000 150000 150000
+42 150000 150000 150000 150000
+43 150000 150000 150000 150000
+44 160000 160000 160000 160000
+45 170000 170000 170000 170000
+46 180000 180000 180000 180000
+47 180000 180000 180000 180000
+48 180000 180000 180000 180000
+49 180000 180000 180000 180000
+50 180000 180000 180000 180000
+```
+
+``` r
+survey %>% skimr::skim()
+```
+
+|                                                  |            |
+| :----------------------------------------------- | :--------- |
+| Name                                             | Piped data |
+| Number of rows                                   | 417        |
+| Number of columns                                | 103        |
+| \_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_   |            |
+| Column type frequency:                           |            |
+| factor                                           | 101        |
+| numeric                                          | 2          |
+| \_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_ |            |
+| Group variables                                  | None       |
+
+Data summary
+
+**Variable type: factor**
+
+| skim\_variable            | n\_missing | complete\_rate | ordered | n\_unique | top\_counts                          |
+| :------------------------ | ---------: | -------------: | :------ | --------: | :----------------------------------- |
+| sex                       |          0 |           1.00 | FALSE   |         2 | Fem: 253, Mal: 164                   |
+| adress                    |          3 |           0.99 | FALSE   |        21 | Bud: 156, Pes: 66, Haj: 23, Sza: 19  |
+| parents\_edu              |          2 |           1.00 | TRUE    |         5 | MSc: 180, hig: 99, BSc: 94, voc: 41  |
+| uni                       |          6 |           0.99 | FALSE   |        16 | Cor: 146, Bud: 58, Bud: 44, Uni: 31  |
+| level\_edu                |          0 |           1.00 | FALSE   |         5 | BSc: 302, MSc: 75, und: 33, oth: 5   |
+| area\_edu                 |          0 |           1.00 | FALSE   |        14 | eco: 215, IT: 54, soc: 36, tec: 21   |
+| continue\_edu             |          0 |           1.00 | FALSE   |         3 | yes: 211, no: 136, yes: 70           |
+| english\_knowledge        |          1 |           1.00 | TRUE    |         4 | med: 193, upp: 176, bas: 44, non: 3  |
+| german\_knowledge         |          0 |           1.00 | TRUE    |         4 | non: 176, bas: 126, med: 84, upp: 31 |
+| employed                  |          0 |           1.00 | FALSE   |         2 | yes: 313, no: 104                    |
+| pro\_employed             |        101 |           0.76 | FALSE   |         2 | no: 181, yes: 135                    |
+| time\_employed            |        107 |           0.74 | TRUE    |         3 | mor: 196, les: 68, mor: 46           |
+| company\_type\_SME        |        377 |           0.10 | FALSE   |         1 | SME: 40                              |
+| company\_type\_local      |        394 |           0.06 | FALSE   |         1 | loc: 23                              |
+| company\_type\_multi      |        353 |           0.15 | FALSE   |         1 | mul: 64                              |
+| company\_type\_public     |        406 |           0.03 | FALSE   |         1 | pub: 11                              |
+| company\_type\_other      |        398 |           0.05 | FALSE   |         1 | oth: 19                              |
+| wpi\_wage                 |          2 |           1.00 | TRUE    |         4 | 5: 208, 4: 167, 3: 36, 2: 4          |
+| wpi\_career               |          3 |           0.99 | TRUE    |         5 | 5: 242, 4: 135, 3: 26, 2: 8          |
+| wpi\_improvement          |          3 |           0.99 | TRUE    |         5 | 5: 301, 4: 91, 3: 19, 2: 2           |
+| wpi\_challenge            |          2 |           1.00 | TRUE    |         5 | 5: 224, 4: 150, 3: 34, 2: 6          |
+| wpi\_enviroment           |          2 |           1.00 | TRUE    |         5 | 4: 177, 5: 149, 3: 75, 2: 12         |
+| wpi\_prestige             |          2 |           1.00 | TRUE    |         5 | 4: 143, 3: 134, 2: 61, 5: 56         |
+| wpi\_corporate            |          2 |           1.00 | TRUE    |         5 | 3: 156, 4: 97, 2: 93, 1: 38          |
+| wpi\_housing              |          2 |           1.00 | TRUE    |         5 | 3: 141, 2: 103, 1: 83, 4: 64         |
+| wpi\_abroad               |          2 |           1.00 | TRUE    |         5 | 4: 114, 3: 111, 5: 90, 2: 63         |
+| wpi\_team                 |          2 |           1.00 | TRUE    |         5 | 4: 136, 3: 116, 5: 113, 2: 35        |
+| wpi\_friends              |          2 |           1.00 | TRUE    |         5 | 5: 152, 4: 117, 3: 96, 2: 39         |
+| wpi\_values               |          3 |           0.99 | TRUE    |         5 | 4: 141, 5: 138, 3: 91, 2: 29         |
+| wpi\_develop              |          4 |           0.99 | TRUE    |         5 | 4: 144, 5: 107, 3: 102, 2: 40        |
+| wpi\_well\_being          |          2 |           1.00 | TRUE    |         5 | 5: 158, 4: 142, 3: 83, 2: 22         |
+| wpi\_manageable\_wl       |          2 |           1.00 | TRUE    |         5 | 5: 257, 4: 119, 3: 31, 2: 6          |
+| wpi\_realxation           |          3 |           0.99 | TRUE    |         5 | 5: 161, 4: 149, 3: 78, 2: 21         |
+| wpi\_ho                   |          2 |           1.00 | TRUE    |         5 | 5: 163, 4: 148, 3: 70, 2: 22         |
+| wpi\_free\_timeing        |          3 |           0.99 | TRUE    |         5 | 4: 151, 5: 135, 3: 103, 2: 18        |
+| wpi\_platform             |          4 |           0.99 | TRUE    |         5 | 4: 133, 5: 127, 3: 117, 2: 27        |
+| quit\_respect             |          1 |           1.00 | TRUE    |         5 | 4: 161, 5: 133, 3: 92, 2: 24         |
+| quit\_wageincrease        |          1 |           1.00 | TRUE    |         5 | 4: 159, 3: 135, 5: 64, 2: 48         |
+| quit\_promotion           |          1 |           1.00 | TRUE    |         5 | 5: 165, 4: 143, 3: 76, 2: 28         |
+| quit\_workload            |          1 |           1.00 | TRUE    |         5 | 4: 142, 5: 127, 3: 104, 2: 32        |
+| quit\_overtime            |          1 |           1.00 | TRUE    |         5 | 5: 267, 4: 90, 3: 40, 2: 14          |
+| quit\_enviroment          |          2 |           1.00 | TRUE    |         5 | 4: 163, 5: 138, 3: 91, 2: 15         |
+| quit\_monotnous           |          1 |           1.00 | TRUE    |         5 | 3: 121, 5: 118, 4: 112, 2: 51        |
+| quit\_salaryoffer         |          1 |           1.00 | TRUE    |         5 | 4: 132, 5: 126, 3: 111, 2: 30        |
+| value\_added              |          1 |           1.00 | FALSE   |         2 | Val: 385, Fil: 31                    |
+| up\_or\_out               |          1 |           1.00 | FALSE   |         2 | Mul: 331, Up : 85                    |
+| prioritize\_wl\_balance   |         13 |           0.97 | TRUE    |         4 | 1: 236, 2: 86, 3: 52, 4: 30          |
+| prioritize\_salary        |         13 |           0.97 | TRUE    |         4 | 2: 181, 3: 95, 1: 72, 4: 56          |
+| prioritize\_pro\_progress |         13 |           0.97 | TRUE    |         4 | 3: 158, 4: 101, 1: 77, 2: 68         |
+| prioritize\_realtions     |         13 |           0.97 | TRUE    |         4 | 4: 217, 3: 99, 2: 69, 1: 19          |
+| ppl\_room                 |          1 |           1.00 | FALSE   |         5 | 2-3: 179, 4-5: 155, 6-8: 42, 1 p: 23 |
+| meeting                   |          1 |           1.00 | TRUE    |         6 | Onc: 197, Mor: 133, Twi: 39, Dai: 25 |
+| online\_contact           |          2 |           1.00 | FALSE   |         2 | yes: 238, no: 177                    |
+| atypical\_platform        |        305 |           0.27 | FALSE   |         1 | pla: 112                             |
+| atypical\_telework        |        227 |           0.46 | FALSE   |         1 | tel: 190                             |
+| atypical\_part\_time      |        278 |           0.33 | FALSE   |         1 | par: 139                             |
+| atypical\_startup         |        194 |           0.53 | FALSE   |         1 | sta: 223                             |
+| atypical\_non\_fixed      |        186 |           0.55 | FALSE   |         1 | non: 231                             |
+| fivey\_salary             |          1 |           1.00 | FALSE   |         4 | 1.5: 219, 2-2: 137, 1-1: 38, Thi: 22 |
+| fivey\_position           |          3 |           0.99 | TRUE    |         4 | mid: 246, ind: 95, sub: 43, top: 30  |
+| fiveyy\_development       |          1 |           1.00 | TRUE    |         4 | 5: 230, 4: 143, 3: 36, 2: 7          |
+| work\_abroad              |          1 |           1.00 | FALSE   |         3 | I d: 180, yes: 132, no: 104          |
+| work\_abroad\_c           |        289 |           0.31 | FALSE   |        14 | Uni: 21, Uni: 14, Aus: 13, oth: 12   |
+| work\_abroad\_p           |        286 |           0.31 | FALSE   |         2 | yes: 120, no: 11                     |
+| country\_stay             |          4 |           0.99 | FALSE   |         4 | In : 188, In : 156, The: 37, In : 32 |
+| stay\_enviroment          |        188 |           0.55 | FALSE   |         1 | int: 229                             |
+| stay\_material            |        177 |           0.58 | FALSE   |         1 | hig: 240                             |
+| stay\_housing             |        199 |           0.52 | FALSE   |         1 | hou: 218                             |
+| stay\_family              |        160 |           0.62 | FALSE   |         1 | fam: 257                             |
+| stay\_friends             |        153 |           0.63 | FALSE   |         1 | fri: 264                             |
+| stay\_development         |        154 |           0.63 | FALSE   |         1 | pro: 263                             |
+| scholarship               |          2 |           1.00 | FALSE   |         3 | ful: 318, sel: 91, par: 6            |
+| mobility\_restrictions    |         93 |           0.78 | FALSE   |         2 | no: 259, yes: 65                     |
+| sabbatical\_know          |          2 |           1.00 | FALSE   |         2 | no: 344, yes: 71                     |
+| ho                        |          1 |           1.00 | TRUE    |         4 | yes: 165, yes: 115, no: 95, yes: 41  |
+| work\_kind                |          2 |           1.00 | TRUE    |         3 | fle: 315, com: 59, fix: 41           |
+| change\_job               |          2 |           1.00 | FALSE   |         4 | eve: 273, eve: 66, eve: 45, nev: 31  |
+| flexibility               |          2 |           1.00 | TRUE    |         4 | I w: 177, Sur: 120, Not: 64, Fur: 54 |
+| baby                      |          2 |           1.00 | FALSE   |         2 | yes: 369, no: 46                     |
+| goal\_confidence          |          3 |           0.99 | TRUE    |        11 | 8: 89, 10: 86, 7: 79, 6: 37          |
+| ws\_high\_payment         |          5 |           0.99 | TRUE    |        11 | 0: 58, 2: 56, 1: 54, 3: 51           |
+| ws\_stable                |          5 |           0.99 | TRUE    |        11 | 7: 84, 8: 61, 6: 55, 5: 50           |
+| ws\_flexible              |          6 |           0.99 | TRUE    |        11 | 8: 80, 7: 73, 6: 52, 5: 46           |
+| ws\_inspiring             |          5 |           0.99 | TRUE    |        11 | 7: 76, 6: 63, 8: 63, 5: 48           |
+| ws\_management            |          6 |           0.99 | TRUE    |        11 | 10: 169, 9: 90, 8: 53, 7: 23         |
+| ws\_large\_company        |          6 |           0.99 | TRUE    |        11 | 0: 87, 3: 60, 2: 57, 1: 52           |
+| wb\_life                  |          4 |           0.99 | TRUE    |        11 | 8: 124, 7: 75, 9: 60, 6: 45          |
+| wb\_finance               |          4 |           0.99 | TRUE    |        11 | 8: 75, 6: 68, 7: 63, 9: 42           |
+| wb\_study                 |          4 |           0.99 | TRUE    |        11 | 8: 83, 7: 71, 9: 69, 10: 59          |
+| wb\_conditions            |          3 |           0.99 | TRUE    |        11 | 9: 77, 8: 74, 10: 66, 7: 51          |
+| wb\_time\_spent           |          3 |           0.99 | TRUE    |        11 | 8: 63, 7: 60, 6: 49, 9: 46           |
+| wb\_meaningful            |          3 |           0.99 | TRUE    |        11 | 8: 84, 7: 80, 9: 64, 6: 45           |
+| wb\_hopefull              |          3 |           0.99 | TRUE    |        11 | 10: 107, 8: 92, 7: 62, 9: 48         |
+| feel\_happy               |          4 |           0.99 | TRUE    |         5 | töb: 216, idő: 92, min: 67, rit: 36  |
+| feel\_stress              |          4 |           0.99 | TRUE    |         5 | töb: 216, idő: 92, min: 67, rit: 36  |
+| feel\_lonely              |          4 |           0.99 | TRUE    |         5 | töb: 216, idő: 92, min: 67, rit: 36  |
+| trust\_ppl                |          3 |           0.99 | TRUE    |        11 | 7: 101, 6: 80, 5: 60, 8: 46          |
+| trust\_politicals         |          3 |           0.99 | TRUE    |        11 | 0: 101, 2: 65, 3: 49, 1: 48          |
+| trust\_legals             |          3 |           0.99 | TRUE    |        11 | 5: 60, 6: 59, 4: 49, 3: 48           |
+| trust\_police             |          3 |           0.99 | TRUE    |        11 | 5: 62, 6: 51, 7: 51, 3: 46           |
+| trust\_military           |          3 |           0.99 | TRUE    |        11 | 5: 62, 7: 54, 8: 53, 4: 48           |
+
+**Variable type: numeric**
+
+| skim\_variable | n\_missing | complete\_rate |     mean |        sd |    p0 |    p25 |    p50 |    p75 |  p100 | hist  |
+| :------------- | ---------: | -------------: | -------: | --------: | ----: | -----: | -----: | -----: | ----: | :---- |
+| comf\_salary   |         45 |           0.89 | 326365.6 | 107238.56 | 80000 | 250000 | 300000 | 400000 | 6e+05 | ▁▇▇▃▃ |
+| real\_salary   |         19 |           0.95 | 231213.6 |  63918.26 | 80000 | 180000 | 230000 | 270000 | 4e+05 | ▂▇▇▃▂ |

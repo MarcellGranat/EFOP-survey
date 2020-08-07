@@ -17,7 +17,7 @@ library(tidyverse)
 ```
 
 ```{r}
-survey <- readxl::read_excel("Egyetemistak elkepzelesei a jovo munkahelyerol-adat-2020-04-16.xlsx")
+survey_untidied <- readxl::read_excel("Egyetemistak elkepzelesei a jovo munkahelyerol-adat-2020-04-16.xlsx")
 ```
 
 ```{r include=F}
@@ -82,7 +82,7 @@ df_names <- tibble::tribble(
   "atypical_startup",                                                                                                                                                                                                                "Az alábbi atipikus foglalkozási formák közül melyik érdekelné? > saját vállalkozás indítása (startup)",                                                                                                                                                                                     "Which of the following atypical employment forms would you be interested in? > startup",
   "atypical_non_fixed",                                                                                                                                                                                                                      "Az alábbi atipikus foglalkozási formák közül melyik érdekelné? > nem helyhez kötött munkavégzés",                                                                                                                                                                        "Which of the following atypical employment forms would you be interested in? > non-fixed employment",
   "comf_salary",                                                                                                                                                                                                                                                                 "Mekkora az a havi nettó bér, amivel elégedett lenne?",                                                                                                                                                                                  "What is your monthly net salary that you would be comfortable with? (In Hungarian Forint)",
-  "real_salary",                                                                                                                                                                                                                  "Ön szerint mekkora az a havi nettó bér, amely az Ön szakterületén pályakezdőként reálisan elérhető?",                                                                                                                                       "What do you think is the net monthly salary that is realistically available in your field as a career beginner? (In Hungarian Forin)",
+  "real_salary",                                                                                                                                                                                                                  "Ön szerint mekkora az a havi nettó bér, amely az Ön szakterületén pályakezdőként reálisan elérhető?",                                                                                                                                       "What do you think is the net monthly salary that is realistically available in your field as a career beginner? (In Hungarian Forint)",
   "fivey_salary",                                                                                                                                                                                                                                                      "5 év elteltével a kezdőfizetése hányszorosával lenne elégedett?",                                                                                                                                                                                              "After 5 years, how many times of your starting salary would you be satisfied?",
   "fivey_position",                                                                                                                                                                                                                                                                    "5 év elteltével milyen beosztást szeretne elérni?",                                                                                                                                                                                                                       "After 5 years, what position do you want to achieve?",
   "fiveyy_development",                                                                                                                                                                                                    "Mennyire fontos önnek, hogy 5 év alatt jelentős szakmai fejlődést produkáljon (anyagiakon és előremenetelen túl)?",                                                                                                                                         "How important is it to you to produce significant professional development (beyond material and hierarchical position) in 5 years?",
@@ -136,8 +136,8 @@ df_names %>% set_names(c("variable", "Question in Hungarian", "Question in Engli
 ## General cleaning
 
 ```{r}
-survey <-
-  survey[-(duplicated(survey[2]) == T) * (is.na(survey[2]) == F) * seq(nrow(survey)), ] %>% # remove the answer from participants, who answered for 2nd time
+survey_untidied <-
+  survey_untidied[-(duplicated(survey_untidied[2]) == T) * (is.na(survey_untidied[2]) == F) * seq(nrow(survey_untidied)), ] %>% # remove the answer from participants, who answered for 2nd time
   select_if(~ sum(!is.na(.)) > 0) %>% # remove empty columns
   .[, ] %>%
   select(-c(1, 2)) %>%  # remove user rank & e-mail ---> not relevant 
@@ -150,13 +150,13 @@ survey <-
 
 ```{r}
 survey_W_outliers_hun <- # before cleaning from outliers at v59 & v60
-  survey %>%
-  set_names(str_c("v", seq_along(survey))) %>% 
+  survey_untidied %>%
+  set_names(str_c("v", seq_along(survey_untidied))) %>% 
   mutate_each(funs(as.factor)) %>%
   mutate_at(c(18:44, 47:50, 63, 82:95, 99:103), factor, ordered = T) %>% 
   mutate(
-    v59 = as.integer(survey$comf_salary),
-    v60 = as.integer(survey$real_salary),
+    v59 = as.integer(survey_untidied$comf_salary),
+    v60 = as.integer(survey_untidied$real_salary),
     # factors which has to be sorted
     v3 = factor(v3, levels = c("legfeljebb általános iskola", "szakiskola vagy szakmunkásképző", "középiskola érettségivel", "főiskola", "egyetem"), ordered = T),
     v5 = factor(v5, levels = c("alapképzés", "mesterképzés", "osztatlan képzés", "PHD képzés", "egyéb")),
@@ -427,3 +427,18 @@ survey <- survey_W_outliers %>% mutate(
   real_salary = survey_hun$real_salary
 )
 ```
+
+```{r}
+data.frame(
+  a = survey_W_outliers_hun$comf_salary,
+  b = survey_hun$comf_salary,
+  c = survey_W_outliers$comf_salary,
+  d = survey$comf_salary
+) %>% arrange(a) %>% head(50)
+```
+
+
+```{r}
+survey %>% skimr::skim()
+```
+
